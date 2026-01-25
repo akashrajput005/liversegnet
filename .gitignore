@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+venv_cuda/
+
+# Data & Downloads
+downloads/
+CholecSegUnified/
+uploads/
+results/
+
+# Models (Ignore Large Weights for GitHub)
+models/*.pth
+!models/baseline_placeholder.txt
+
+# Test files (keep these OUT of Git)
+test_*.png
+test_*.avi
+surg_*.png
+temp_*.txt
+
+# OS & IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

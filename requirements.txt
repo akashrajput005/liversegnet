@@ -1,0 +1,16 @@
+torch
+torchvision
+torchaudio
+opencv-python
+numpy
+scipy
+albumentations
+segmentation-models-pytorch
+pyyaml
+tqdm
+fastapi
+python-multipart
+uvicorn
+streamlit
+pillow
+requests
