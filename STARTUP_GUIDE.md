@@ -4,13 +4,13 @@
 
 ### Terminal 1: Start the API Backend
 ```powershell
-cd c:\Users\akash\OneDrive\Desktop\LiverSegNet
+cd C:\Users\Public\liversegnet
 venv_cuda\Scripts\python.exe ui/app_api.py
 ```
 
 ### Terminal 2: Start the Streamlit Dashboard
 ```powershell
-cd c:\Users\akash\OneDrive\Desktop\LiverSegNet
+cd C:\Users\Public\liversegnet
 venv_cuda\Scripts\python.exe -m streamlit run ui/app.py
 ```
 
@@ -39,13 +39,13 @@ Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue | ForEach-Obj
 Get-Process -Name streamlit -ErrorAction SilentlyContinue | Stop-Process -Force
 
 # Start API
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd c:\Users\akash\OneDrive\Desktop\LiverSegNet; venv_cuda\Scripts\python.exe ui/app_api.py"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd C:\Users\Public\liversegnet; venv_cuda\Scripts\python.exe ui/app_api.py"
 
 # Wait 3 seconds
 Start-Sleep -Seconds 3
 
 # Start UI
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd c:\Users\akash\OneDrive\Desktop\LiverSegNet; venv_cuda\Scripts\python.exe -m streamlit run ui/app.py"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd C:\Users\Public\liversegnet; venv_cuda\Scripts\python.exe -m streamlit run ui/app.py"
 ```
 
 ---

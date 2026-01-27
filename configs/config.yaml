@@ -3,6 +3,11 @@ active_model: deeplabv3plus
 batch_size: 2
 cholecinstanceseg_path: C:\Users\akash\Downloads\cholecinstanceseg\cholecinstanceseg
 cholecseg8k_path: C:\Users\akash\Downloads\cholecseg8k
+cholec80_path: C:\Users\akash\Downloads\cholec80
+endovis_path: C:\Users\akash\Downloads\endovis
+reference_images_path: C:\Users\akash\Downloads\cholecinstance_seg_reference_image_set
+seed: 42
+val_ratio: 0.15
 img_size:
 - 480
 - 854
@@ -13,12 +18,12 @@ labels:
   background: 0
   instrument: 2
   liver: 1
-num_workers: 2
+num_workers: 6
 reference_images_path: C:\Users\akash\Downloads\cholecinstance_seg_reference_image_set
 stage1:
-  epochs: 15
+  epochs: 25
   lr: 1e-4
 stage2:
-  epochs: 25
+  epochs: 60
   lr: 5e-5
-unified_dataset_path: C:\Users\akash\Downloads\CholecSegUnified
+unified_dataset_path: C:\Users\akash\Downloads\cholecseg8k

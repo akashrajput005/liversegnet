@@ -22,10 +22,20 @@ def get_model(architecture='unet', encoder='resnet34', in_channels=3, num_classe
     return model
 
 class HybridLoss(nn.Module):
-    def __init__(self, num_classes=3):
+    def __init__(self, num_classes=3, ignore_index=255):
         super(HybridLoss, self).__init__()
-        self.dice_loss = smp.losses.DiceLoss(mode='multiclass', classes=num_classes)
-        self.ce_loss = nn.CrossEntropyLoss()
+
+        if num_classes <= 1:
+            raise ValueError('num_classes must be >= 2')
+
+        # Dice should usually focus on foreground classes (exclude background=0)
+        if num_classes == 2:
+            dice_classes = [1]
+        else:
+            dice_classes = list(range(1, num_classes))
+
+        self.dice_loss = smp.losses.DiceLoss(mode='multiclass', classes=dice_classes, ignore_index=255)
+        self.ce_loss = nn.CrossEntropyLoss(ignore_index=255)
         
     def forward(self, y_pred, y_true):
         # y_pred: (B, C, H, W)
