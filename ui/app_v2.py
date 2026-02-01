@@ -10,6 +10,7 @@ import time
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
+from pathlib import Path
 
 # --- Page Config ---
 st.set_page_config(
@@ -250,10 +251,98 @@ def segment_image(file, model=None, ensemble=False):
             
         response = requests.post(f"{API_BASE}/segment_image", files=files, params=params)
         if response.status_code == 200:
-            return response.json()
+            result = response.json()
+            
+            # Automatically save results to results directory
+            save_segmentation_results(result, file.name, model, ensemble)
+            
+            return result
     except Exception as e:
         st.error(f"Error: {str(e)}")
     return None
+
+def save_segmentation_results(result, filename, model=None, ensemble=False):
+    """Save segmentation results to results directory"""
+    try:
+        import datetime
+        import json
+        
+        # Create results directory if it doesn't exist
+        os.makedirs("results", exist_ok=True)
+        
+        # Generate timestamp
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        # Create base filename (remove extension)
+        base_name = os.path.splitext(filename)[0]
+        
+        # Save analysis metadata
+        analysis_data = {
+            "timestamp": timestamp,
+            "original_filename": filename,
+            "model_used": model or "ensemble" if ensemble else "default",
+            "mode": "ensemble" if ensemble else "single_model",
+            "inference_time": result.get('inference_time', 0),
+            "liver_detected": result.get('liver_detected', False),
+            "instrument_detected": result.get('instrument_detected', False),
+            "occlusion_percent": result.get('occlusion_percent', 0),
+            "distance_px": result.get('distance_px', -1),
+            "metrics": result.get('metrics', {}),
+            "individual_results": result.get('individual_results', {})
+        }
+        
+        # Save JSON analysis
+        analysis_filename = f"results/{base_name}_{timestamp}_analysis.json"
+        with open(analysis_filename, 'w') as f:
+            json.dump(analysis_data, f, indent=2)
+        
+        # Download and save overlay image
+        if 'overlay_url' in result:
+            overlay_response = requests.get(f"{API_BASE}/{result['overlay_url']}")
+            if overlay_response.status_code == 200:
+                overlay_filename = f"results/{base_name}_{timestamp}_overlay.png"
+                with open(overlay_filename, 'wb') as f:
+                    f.write(overlay_response.content)
+        
+        # Download and save mask
+        if 'mask_url' in result:
+            mask_response = requests.get(f"{API_BASE}/{result['mask_url']}")
+            if mask_response.status_code == 200:
+                mask_filename = f"results/{base_name}_{timestamp}_mask.png"
+                with open(mask_filename, 'wb') as f:
+                    f.write(mask_response.content)
+        
+        # Create summary text file
+        summary_filename = f"results/{base_name}_{timestamp}_summary.txt"
+        with open(summary_filename, 'w') as f:
+            f.write(f"LiverSegNet Segmentation Analysis Results\n")
+            f.write(f"{'='*50}\n\n")
+            f.write(f"Timestamp: {timestamp}\n")
+            f.write(f"Original File: {filename}\n")
+            f.write(f"Model Used: {model or 'ensemble' if ensemble else 'default'}\n")
+            f.write(f"Mode: {'Ensemble' if ensemble else 'Single Model'}\n\n")
+            f.write(f"Results:\n")
+            f.write(f"  Liver Detected: {'Yes' if result.get('liver_detected') else 'No'}\n")
+            f.write(f"  Instruments Detected: {'Yes' if result.get('instrument_detected') else 'No'}\n")
+            f.write(f"  Inference Time: {result.get('inference_time', 0):.3f} seconds\n")
+            f.write(f"  Occlusion: {result.get('occlusion_percent', 0):.1f}%\n")
+            f.write(f"  Distance: {result.get('distance_px', -1):.0f} pixels\n\n")
+            
+            if 'metrics' in result:
+                metrics = result['metrics']
+                f.write(f"Detailed Metrics:\n")
+                f.write(f"  Liver Area: {metrics.get('liver_area_percent', 0):.1f}%\n")
+                f.write(f"  Instrument Area: {metrics.get('instrument_area_percent', 0):.1f}%\n")
+                f.write(f"  Liver Regions: {metrics.get('liver_regions', 0)}\n")
+                f.write(f"  Instrument Regions: {metrics.get('instrument_regions', 0)}\n")
+                f.write(f"  Liver Compactness: {metrics.get('liver_compactness_mean', 0):.3f}\n")
+                f.write(f"  Instrument Compactness: {metrics.get('instrument_compactness_mean', 0):.3f}\n")
+        
+        # Show success message
+        st.success(f"✅ Results saved to `results/` directory with timestamp {timestamp}")
+        
+    except Exception as e:
+        st.warning(f"⚠️ Could not save results: {str(e)}")
 
 def create_metrics_dashboard(metrics):
     """Create comprehensive metrics dashboard"""
@@ -475,7 +564,7 @@ def main():
         save_masks = st.checkbox("💾 Save Segmentation Masks", value=False)
     
     # Main Content
-    tab1, tab2, tab3 = st.tabs(["📸 Image Segmentation", "🎥 Video Processing", "📈 Model Analytics"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📸 Image Segmentation", "🎥 Video Processing", "📈 Model Analytics", "💾 Saved Results"])
     
     with tab1:
         st.markdown("""
@@ -648,6 +737,140 @@ def main():
                     ⚡ Ready for Processing
                 </div>
             """, unsafe_allow_html=True)
+
+    with tab4:
+        st.markdown("""
+            <div class="glass-card">
+                <h3>💾 Saved Segmentation Results</h3>
+                <p>View and manage your saved segmentation analysis results.</p>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        # Check if results directory exists
+        if os.path.exists("results"):
+            # Get all analysis files
+            analysis_files = [f for f in os.listdir("results") if f.endswith("_analysis.json")]
+            
+            if analysis_files:
+                # Sort by timestamp (newest first)
+                analysis_files.sort(reverse=True)
+                
+                # Show statistics
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric("Total Analyses", len(analysis_files))
+                
+                with col2:
+                    overlay_files = [f for f in os.listdir("results") if f.endswith("_overlay.png")]
+                    st.metric("Overlay Images", len(overlay_files))
+                
+                with col3:
+                    mask_files = [f for f in os.listdir("results") if f.endswith("_mask.png")]
+                    st.metric("Segmentation Masks", len(mask_files))
+                
+                # Show recent analyses
+                st.markdown("### 📋 Recent Analyses")
+                
+                for i, analysis_file in enumerate(analysis_files[:10]):  # Show last 10
+                    try:
+                        with open(f"results/{analysis_file}", 'r') as f:
+                            data = json.load(f)
+                        
+                        # Create expandable section for each analysis
+                        with st.expander(f"🕐 {data['timestamp']} - {data['original_filename']}"):
+                            col1, col2 = st.columns([2, 1])
+                            
+                            with col1:
+                                st.markdown(f"""
+                                    **Model:** {data['model_used']}  
+                                    **Mode:** {data['mode']}  
+                                    **Inference Time:** {data['inference_time']:.3f}s
+                                """)
+                                
+                                # Show metrics if available
+                                if data.get('metrics'):
+                                    metrics = data['metrics']
+                                    st.markdown(f"""
+                                        **Liver Area:** {metrics.get('liver_area_percent', 0):.1f}%  
+                                        **Instrument Area:** {metrics.get('instrument_area_percent', 0):.1f}%  
+                                        **Liver Regions:** {metrics.get('liver_regions', 0)}  
+                                        **Instrument Regions:** {metrics.get('instrument_regions', 0)}
+                                    """)
+                            
+                            with col2:
+                                # Detection status
+                                liver_status = "✅" if data.get('liver_detected') else "❌"
+                                inst_status = "✅" if data.get('instrument_detected') else "❌"
+                                
+                                st.markdown(f"""
+                                    **Liver Detected:** {liver_status}  
+                                    **Instruments:** {inst_status}  
+                                    **Occlusion:** {data.get('occlusion_percent', 0):.1f}%  
+                                    **Distance:** {data.get('distance_px', -1):.0f}px
+                                """)
+                            
+                            # Show images if available
+                            base_name = analysis_file.replace("_analysis.json", "")
+                            overlay_path = f"results/{base_name}_overlay.png"
+                            mask_path = f"results/{base_name}_mask.png"
+                            
+                            if os.path.exists(overlay_path) or os.path.exists(mask_path):
+                                st.markdown("**📸 Results:**")
+                                
+                                img_cols = st.columns(2)
+                                
+                                with img_cols[0]:
+                                    if os.path.exists(overlay_path):
+                                        st.image(overlay_path, caption="Segmentation Overlay", use_column_width=True)
+                                
+                                with img_cols[1]:
+                                    if os.path.exists(mask_path):
+                                        st.image(mask_path, caption="Segmentation Mask", use_column_width=True)
+                    
+                    except Exception as e:
+                        st.error(f"Error loading {analysis_file}: {str(e)}")
+                
+                # Download all results button
+                if st.button("📦 Download All Results as ZIP"):
+                    try:
+                        import zipfile
+                        zip_path = "results/all_results.zip"
+                        
+                        with zipfile.ZipFile(zip_path, 'w') as zipf:
+                            for root, dirs, files in os.walk("results"):
+                                for file in files:
+                                    if not file.endswith(".zip"):
+                                        file_path = os.path.join(root, file)
+                                        zipf.write(file_path, file)
+                        
+                        with open(zip_path, 'rb') as f:
+                            st.download_button(
+                                label="📥 Download ZIP",
+                                data=f.read(),
+                                file_name="liversegnet_results.zip",
+                                mime="application/zip"
+                            )
+                        
+                        os.remove(zip_path)  # Clean up temporary zip file
+                        
+                    except Exception as e:
+                        st.error(f"Error creating ZIP: {str(e)}")
+                
+            else:
+                st.info("📝 No saved analyses found. Run some segmentation analyses first!")
+        else:
+            st.info("📁 Results directory not found. Run some segmentation analyses to create it!")
+        
+        # Clear results button
+        if st.button("🗑️ Clear All Results", type="secondary"):
+            if os.path.exists("results"):
+                import shutil
+                shutil.rmtree("results")
+                st.success("✅ All results cleared!")
+                st.rerun()
+            else:
+                st.info("No results to clear.")
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 active_encoder: resnet50
 active_model: deeplabv3plus
-batch_size: 2
+batch_size: 4
 cholecinstanceseg_path: C:\Users\akash\Downloads\cholecinstanceseg\cholecinstanceseg
 cholecseg8k_path: C:\Users\akash\Downloads\cholecseg8k
 cholec80_path: C:\Users\akash\Downloads\cholec80
@@ -12,18 +12,21 @@ img_size:
 - 480
 - 854
 input_size:
-- 512
-- 512
+- 256
+- 256
 labels:
   background: 0
   instrument: 2
   liver: 1
-num_workers: 6
+num_workers: 2
 reference_images_path: C:\Users\akash\Downloads\cholecinstance_seg_reference_image_set
 stage1:
   epochs: 25
   lr: 1e-4
 stage2:
   epochs: 60
-  lr: 5e-5
+  lr: 3e-5
+stage3:
+  epochs: 30
+  lr: 1e-4
 unified_dataset_path: C:\Users\akash\Downloads\cholecseg8k

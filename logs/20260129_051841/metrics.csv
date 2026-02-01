@@ -1,0 +1,2 @@
+stage,epoch,train_loss,val_loss,val_dice_liver,val_dice_inst,lr
+stage1,1,0.6531045570969581,0.669795450297269,1.62663476320175e-11,0.0,8.15042387139646e-06

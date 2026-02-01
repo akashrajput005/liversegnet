@@ -53,10 +53,10 @@ def initialize_engines():
             model_path=stage1_path,
             architecture='deeplabv3plus',
             encoder='resnet50',
-            num_classes=2,
-            img_size=config['input_size']
+            img_size=config['input_size'],
+            num_classes=2
         )
-        print("✅ Stage 1 anatomy engine loaded")
+        print("✅ Stage 1 engine loaded")
     
     return engines
 
@@ -114,16 +114,16 @@ def calculate_advanced_metrics(mask: np.ndarray, ground_truth: Optional[np.ndarr
             inst_compactness.append(compactness)
     
     metrics = {
-        'liver_area_percent': liver_percent,
-        'instrument_area_percent': inst_percent,
-        'liver_regions': num_liver_regions,
-        'instrument_regions': num_inst_regions,
+        'liver_area_percent': float(liver_percent),
+        'instrument_area_percent': float(inst_percent),
+        'liver_regions': int(num_liver_regions),
+        'instrument_regions': int(num_inst_regions),
         'liver_perimeter': float(liver_perimeter),
         'instrument_perimeter': float(inst_perimeter),
-        'liver_compactness_mean': np.mean(liver_compactness) if liver_compactness else 0.0,
-        'instrument_compactness_mean': np.mean(inst_compactness) if inst_compactness else 0.0,
-        'liver_detected': liver_pixels > 100,
-        'instrument_detected': inst_pixels > 50
+        'liver_compactness_mean': float(np.mean(liver_compactness)) if liver_compactness else 0.0,
+        'instrument_compactness_mean': float(np.mean(inst_compactness)) if inst_compactness else 0.0,
+        'liver_detected': bool(liver_pixels > 100),
+        'instrument_detected': bool(inst_pixels > 50)
     }
     
     return metrics

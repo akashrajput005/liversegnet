@@ -1,0 +1,7 @@
+frame_index: 157
+liver_ratio: 0.1723175048828125
+tool_ratio: 0.288665771484375
+num_tools: 4
+multiple_tools: True
+edge_complexity: 0.0
+overall_score: 0.33829498291015625

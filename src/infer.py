@@ -13,14 +13,19 @@ import yaml
 import os
 
 class InferenceEngine:
-    def __init__(self, model_path, architecture='unet', encoder='resnet34', device='cuda', img_size=(512, 512)):
+    def __init__(self, model_path, architecture='unet', encoder='resnet34', device='cuda', img_size=(512, 512), num_classes=3):
         self.device = torch.device(device if torch.cuda.is_available() else 'cpu')
         self.img_size = img_size
         
-        # 1. Main Model (3-class)
-        self.model = get_model(architecture=architecture, encoder=encoder, num_classes=3)
+        # 1. Main Model
+        self.model = get_model(architecture=architecture, encoder=encoder, num_classes=num_classes)
         if os.path.exists(model_path):
-            self.model.load_state_dict(torch.load(model_path, map_location=self.device))
+            checkpoint = torch.load(model_path, map_location=self.device)
+            # Handle checkpoint with metadata wrapper
+            if 'model_state_dict' in checkpoint:
+                self.model.load_state_dict(checkpoint['model_state_dict'])
+            else:
+                self.model.load_state_dict(checkpoint)
         self.model.to(self.device).eval()
 
         # 2. Anatomical Anchor (U-Net 3-class)
@@ -28,7 +33,11 @@ class InferenceEngine:
         anchor_path = os.path.join(os.path.dirname(model_path), 'unet_resnet34.pth')
         if architecture == 'deeplabv3plus' and os.path.exists(anchor_path):
             self.anchor_model = get_model(architecture='unet', encoder='resnet34', num_classes=3)
-            self.anchor_model.load_state_dict(torch.load(anchor_path, map_location=self.device))
+            anchor_checkpoint = torch.load(anchor_path, map_location=self.device)
+            if 'model_state_dict' in anchor_checkpoint:
+                self.anchor_model.load_state_dict(anchor_checkpoint['model_state_dict'])
+            else:
+                self.anchor_model.load_state_dict(anchor_checkpoint)
             self.anchor_model.to(self.device).eval()
             print("Clinical Ensemble: U-Net Anchor Active.")
 
@@ -37,7 +46,11 @@ class InferenceEngine:
         s1_path = os.path.join(os.path.dirname(model_path), 'deeplabv3plus_resnet50_stage1.pth')
         if os.path.exists(s1_path):
             self.anatomy_model = get_model(architecture='deeplabv3plus', encoder='resnet50', num_classes=2)
-            self.anatomy_model.load_state_dict(torch.load(s1_path, map_location=self.device))
+            s1_checkpoint = torch.load(s1_path, map_location=self.device)
+            if 'model_state_dict' in s1_checkpoint:
+                self.anatomy_model.load_state_dict(s1_checkpoint['model_state_dict'])
+            else:
+                self.anatomy_model.load_state_dict(s1_checkpoint)
             self.anatomy_model.to(self.device).eval()
             print("Clinical Ensemble: Stage 1 Anatomy Anchor Active.")
         

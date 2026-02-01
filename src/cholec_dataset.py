@@ -61,18 +61,63 @@ class CholecSeg8kDataset(Dataset):
         image = cv2.imread(img_path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-        # Load mask
+        # Load mask with debugging
         if mask_path.endswith('_endo_color_mask.png'):
             mask_bgr = cv2.imread(mask_path)
             mask = self.convert_color_mask_to_classes(mask_bgr)
+            mask_type = "color"
         else:
             mask_gray = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
             # Convert binary to multi-class (0=bg, 1=liver, 2=instrument)
-            mask = np.where(mask_gray > 0, 1, 0)
+            # For binary masks, we can only distinguish bg vs liver, no instrument info
+            # CRITICAL FIX: Binary masks might have values 0-255, normalize first
+            if mask_gray.max() > 1:
+                # Binary mask with values 0-255, normalize to 0-1
+                mask = np.where(mask_gray > 127, 1, 0)  # Threshold at 127
+            else:
+                # Already normalized binary mask
+                mask = np.where(mask_gray > 0, 1, 0)
+            
+            # CRITICAL FIX: Ensure only valid class values (0, 1, 2)
+            mask = np.clip(mask, 0, 2)
+            mask_type = "binary"
+            
+            # Additional validation for binary masks
+            unique_binary = np.unique(mask)
+            if np.any(unique_binary < 0) or np.any(unique_binary > 2):
+                print(f"🚨 Invalid binary mask values: {unique_binary}")
+                mask = np.clip(mask, 0, 2)
+        
+        # DEBUG: Check mask values for first few samples
+        if idx < 5:
+            unique_vals = np.unique(mask)
+            print(f"[DEBUG] idx={idx} mask_shape={mask.shape} unique_vals={unique_vals} sum={mask.sum()}")
         
         # Resize
         image = cv2.resize(image, (self.target_size[1], self.target_size[0]))
         mask = cv2.resize(mask, (self.target_size[1], self.target_size[0]), interpolation=cv2.INTER_NEAREST)
+        
+        # CRITICAL FIX: Ensure valid values after resize (interpolation can introduce issues)
+        mask = np.clip(mask, 0, 2)
+        
+        # DEBUG: Check values after resize
+        if idx < 5:
+            unique_vals_after = np.unique(mask)
+            print(f"[DEBUG] idx={idx} after_resize unique_vals={unique_vals_after}")
+            
+            # Verify no invalid values
+            if np.any(unique_vals_after < 0) or np.any(unique_vals_after > 2):
+                print(f"🚨 INVALID VALUES AFTER RESIZE: {unique_vals_after}")
+                mask = np.clip(mask, 0, 2)  # Force valid range
+                unique_vals_fixed = np.unique(mask)
+                print(f"✅ Fixed after resize: {unique_vals_fixed}")
+        
+        # STEP 2: Preprocessing Survival Check (disabled)
+        # inst_pixels = (mask == 2).sum()
+        # liver_pixels = (mask == 1).sum()
+        # 
+        # if idx < 3:
+        #     print(f"[DEBUG] liver_pixels={liver_pixels}, inst_pixels={inst_pixels}")
         
         if self.transform:
             augmented = self.transform(image=image, mask=mask)
@@ -87,18 +132,18 @@ class CholecSeg8kDataset(Dataset):
     def convert_color_mask_to_classes(self, color_mask):
         """Convert color mask to 3-class indices.
 
-        Observed CholecSeg8k *_endo_color_mask.png uses a fixed palette with a handful of colors.
-        HSV heuristics are brittle; instead we decode per-image by palette frequency:
-        - background: most frequent color
-        - liver: largest remaining region color
-        - instrument: union of all remaining colors
-
+        Enhanced color detection for better instrument recognition
+        
         Output classes:
         0=background, 1=liver, 2=instrument
         """
         h, w = color_mask.shape[:2]
         flat = color_mask.reshape(-1, 3)
         colors, counts = np.unique(flat, axis=0, return_counts=True)
+
+        # Skip if only background color
+        if len(colors) <= 1:
+            return np.zeros((h, w), dtype=np.uint8)
 
         # background = most frequent color
         bg_idx = int(np.argmax(counts))
@@ -115,13 +160,29 @@ class CholecSeg8kDataset(Dataset):
             liver_pixels = np.all(color_mask == liver_color, axis=2)
             class_mask[liver_pixels] = 1
 
-            # instruments = all other remaining colors
+            # instruments = all other remaining colors (enhanced detection)
             for i, _c in rem[1:]:
                 inst_color = colors[i]
                 inst_pixels = np.all(color_mask == inst_color, axis=2)
                 class_mask[inst_pixels] = 2
 
-        # background stays 0 implicitly
+        # CRITICAL FIX: Ensure only valid class values (0, 1, 2)
+        # This prevents CUDA errors in one_hot encoding
+        class_mask = np.clip(class_mask, 0, 2)
+        
+        # DEBUG: Verify final mask values
+        unique_final = np.unique(class_mask)
+        if len(unique_final) > 3 or np.any(unique_final < 0) or np.any(unique_final > 2):
+            print(f"🚨 INVALID MASK VALUES AFTER CONVERSION: {unique_final}")
+            class_mask = np.clip(class_mask, 0, 2)  # Force valid range
+            unique_final = np.unique(class_mask)
+            print(f"✅ Fixed mask values: {unique_final}")
+
+        # Add debug info for color detection (disabled for clean terminal)
+        # unique_classes = np.unique(class_mask)
+        # if len(unique_classes) > 2 and np.random.random() < 0.1:  # Only 10% of color masks
+        #     print(f"🎯 Color mask detected: bg={np.sum(class_mask==0)}, liver={np.sum(class_mask==1)}, inst={np.sum(class_mask==2)}")
+
         return class_mask
 
     def get_video_id(self, idx: int) -> str:

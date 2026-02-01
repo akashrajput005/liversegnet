@@ -1,0 +1,8 @@
+frame_index: 706
+liver_ratio: 0.173309326171875
+tool_ratio: 0.4935455322265625
+num_tools: 3
+multiple_tools: True
+edge_complexity: 0.0
+overall_score: 0.40005645751953123
+note: Raw surgical frame - AI segmentation needed

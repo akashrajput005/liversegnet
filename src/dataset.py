@@ -6,7 +6,6 @@ import torch
 from torch.utils.data import Dataset
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
-from PIL import Image
 
 class LiverInstrumentDataset(Dataset):
     def __init__(self, unified_root, split='train', transform=None, target_size=(512, 512)):
