@@ -51,22 +51,23 @@ echo.
 echo 🚀 Ready to use! Open your browser and go to:
 echo    http://localhost:8500
 echo.
-echo 📁 Professional Directories:
-echo    • ui_launcher.py        - UI selection interface
-echo    • ui/app_v2.py          - Standard enhanced UI
-echo    • ui/app_professional_medical.py - Professional medical UI
-echo    • ui/app_advanced_surgical.py    - Advanced research UI
-echo    • critical_frames/     - Test frames with liver + tools
-echo    • results/            - Auto-saved professional analyses
+echo 📁 Available UI Files:
+echo    • ui/app_medical_unified.py        - MAIN INTERFACE (Patient + Professional)
+echo    • ui/app_professional_medical.py   - Professional medical UI
+echo    • ui/app_advanced_surgical.py      - Advanced research UI
+echo    • ui/app_surgical_clean.py         - Clean surgical interface
+echo    • ui/app_v2.py                     - Standard enhanced UI
+echo    • critical_frames/                 - Test frames for AI testing
+echo    • results/                         - Analysis results directory
 echo.
-echo 🚨 Medical Alert System:
-echo    • Critical occlusion detection
-echo    • Real-time performance monitoring
-echo    • Professional medical metrics
-echo    • Advanced analytics dashboard
+echo 🚨 Current Features:
+echo    • Unified Medical Suite with dual modes
+echo    • Real-time AI detection and metrics
+echo    • Image enhancement and preprocessing
+echo    • Professional error handling
+echo    • GPU/CPU detection and monitoring
 echo.
 echo ========================================
-echo 💡 PRO TIP: Use the UI Launcher (http://localhost:8500) to choose
-echo    the best interface for your specific medical use case!
-echo.
+echo 💡 READY TO USE: Open http://localhost:8500
+echo ========================================
 pause
