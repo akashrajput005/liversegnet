@@ -101,38 +101,81 @@ class InferenceEngine:
         if mask_anatomy is not None:
             mask_anatomy = cv2.resize(mask_anatomy.astype(np.uint8), (w, h), interpolation=cv2.INTER_NEAREST)
         
-        # --- ENSEMBLE RECONSTRUCTION ---
-        # Class 1: Liver Priority (Stage 1 > U-Net > Stage 2)
-        liver_mask = np.zeros((h, w), dtype=np.uint8)
+        # --- ENSEMBLE RECONSTRUCTION WITH PROBABILITY FUSION ---
+        # Accumulate probabilities from all models
+        liver_prob = np.zeros((h, w), dtype=np.float32)
+        inst_prob = np.zeros((h, w), dtype=np.float32)
+        total_weight = 0.0
+        
+        # Model weights based on reliability
         if mask_anatomy is not None:
-            liver_mask = (mask_anatomy == 1).astype(np.uint8) # S1 Liver is class 1
-        elif mask_anchor is not None:
-            liver_mask = (mask_anchor == 1).astype(np.uint8)
-        else:
-            liver_mask = (mask_main == 1).astype(np.uint8)
+            # Stage 1 is liver specialist - high confidence on liver
+            liver_prob += (mask_anatomy == 1).astype(np.float32) * 2.0
+            total_weight += 2.0
+        
+        if mask_anchor is not None:
+            # U-Net balanced model
+            liver_prob += (mask_anchor == 1).astype(np.float32) * 1.5
+            inst_prob += (mask_anchor == 2).astype(np.float32) * 1.5
+            total_weight += 1.5
+        
+        # Main model always contributes
+        liver_prob += (mask_main == 1).astype(np.float32) * 1.0
+        inst_prob += (mask_main == 2).astype(np.float32) * 1.2 # Slighly more weight on tools for main model
+        total_weight += 1.0
+        
+        # Normalize and SMOOTH probabilities to reduce noise
+        if total_weight > 0:
+            liver_prob /= total_weight
+            inst_prob /= total_weight
             
-        # Class 2: Instrument (Always use Main)
-        inst_mask = (mask_main == 2).astype(np.uint8)
-
-        # Post-Processing: Refined Sensitivity
-        kernel_tiny = np.ones((2,2), np.uint8)
+        # Apply slight Gaussian Blur to probabilities for smoother boundaries
+        liver_prob = cv2.GaussianBlur(liver_prob, (5, 5), 0)
+        inst_prob = cv2.GaussianBlur(inst_prob, (3, 3), 0)
         
-        # Clean Liver (Handle split blobs > 50px)
+        # Adaptive Thresholding for cleaner detection
+        liver_mask = (liver_prob > 0.45).astype(np.uint8)
+        inst_mask = (inst_prob > 0.4).astype(np.uint8)
+
+        # Post-Processing: Advanced Island Removal
+        
+        # 1. LIVER: Usually one large mass. Keep only the largest component + significant fragments
         num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(liver_mask, connectivity=8)
-        liver_mask_clean = np.zeros_like(liver_mask)
-        for i in range(1, num_labels):
-            if stats[i, cv2.CC_STAT_AREA] > 50:
-                liver_mask_clean[labels == i] = 1
-        liver_mask = liver_mask_clean
+        if num_labels > 1:
+            liver_mask_clean = np.zeros_like(liver_mask)
+            # Find largest component index (excluding background)
+            largest_idx = np.argmax(stats[1:, cv2.CC_STAT_AREA]) + 1
+            max_area = stats[largest_idx, cv2.CC_STAT_AREA]
+            
+            for i in range(1, num_labels):
+                area = stats[i, cv2.CC_STAT_AREA]
+                # Keep largest OR anything > 10% of largest area (but min 500px)
+                if i == largest_idx or (area > max_area * 0.1 and area > 500):
+                    liver_mask_clean[labels == i] = 1
+            liver_mask = liver_mask_clean
 
-        # Clean Instruments (Gentle preservation)
-        inst_mask = cv2.morphologyEx(inst_mask, cv2.MORPH_OPEN, kernel_tiny)
+        # 2. INSTRUMENTS: Multiple small tools possible. Remove tiny noise blobs.
+        # Morphological Closing to connect tool parts
+        kernel_tool = np.ones((5,5), np.uint8)
+        inst_mask = cv2.morphologyEx(inst_mask, cv2.MORPH_CLOSE, kernel_tool)
         
-        # Detection Flags
-        liver_present = bool(np.sum(liver_mask) > 50)
-        inst_present = bool(np.sum(inst_mask) > 30)
+        num_labels_i, labels_i, stats_i, _ = cv2.connectedComponentsWithStats(inst_mask, connectivity=8)
+        inst_mask_clean = np.zeros_like(inst_mask)
+        for i in range(1, num_labels_i):
+            # Tools should be at least 150 pixels to be considered detection vs noise
+            if stats_i[i, cv2.CC_STAT_AREA] > 150:
+                inst_mask_clean[labels_i == i] = 1
+        inst_mask = inst_mask_clean
+        
+        # Final refinement: Ensure tools don't blend with liver unless occluded
+        # If pixels are marked as both, prefer instrument (occlusion)
+        liver_mask[inst_mask == 1] = 0
+        
+        # Detection Flags with noise-resistant thresholds
+        liver_present = bool(np.sum(liver_mask) > 500)
+        inst_present = bool(np.sum(inst_mask) > 200)
 
-        # Reconstruct final mask overlay
+        # Reconstruct final mask
         final_mask = np.zeros((h, w), dtype=np.uint8)
         final_mask[liver_mask > 0] = 1
         final_mask[inst_mask > 0] = 2
