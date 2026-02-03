@@ -1,5 +1,5 @@
-active_encoder: resnet50
-active_model: deeplabv3plus
+active_encoder: efficientnet-b4
+active_model: unet
 batch_size: 4
 cholecinstanceseg_path: C:\Users\akash\Downloads\cholecinstanceseg\cholecinstanceseg
 cholecseg8k_path: C:\Users\akash\Downloads\cholecseg8k

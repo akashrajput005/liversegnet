@@ -78,8 +78,11 @@ class InferenceEngine:
         image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
         
         # --- ULTIMATE TTA (Test Time Augmentation) PIPELINE ---
+        # Enhanced with Multi-Scale scanning for Minute Details
         def get_model_tta(model, img_rgb):
             if model is None: return None
+            
+            # 1. Standard Scale (1.0x)
             # Pass 1: Original
             t1 = self.transform(image=img_rgb)['image'].unsqueeze(0).to(self.device)
             p1 = self._get_probs(model, t1) # (C, H, W)
@@ -90,14 +93,21 @@ class InferenceEngine:
             p2 = self._get_probs(model, t2)
             p2_flip = np.flip(p2, axis=2) # Flip back
             
-            # Pass 3: Vertical Flip
-            img_vflip = cv2.flip(img_rgb, 0)
-            t3 = self.transform(image=img_vflip)['image'].unsqueeze(0).to(self.device)
-            p3 = self._get_probs(model, t3)
-            p3_flip = np.flip(p3, axis=1) # Flip back
+            # 2. Detail Scale (1.25x) - Catches tiny tips
+            # We process this only for the "Fine" scan, then downsample back
+            h_orig, w_orig = img_rgb.shape[:2]
+            img_scaled = cv2.resize(img_rgb, (int(w_orig*1.25), int(h_orig*1.25)))
+            t_scaled = self.transform(image=img_scaled)['image'].unsqueeze(0).to(self.device)
+            p3 = self._get_probs(model, t_scaled)
             
-            # Fusion
-            return (p1 + p2_flip + p3_flip) / 3.0
+            # FORCE-SAFE FUSION: Resize everything to target 256x256 (Model Output)
+            # This is critical because some graphics drivers might return undefined TTA shapes
+            target_h, target_w = p1.shape[1], p1.shape[2]
+            
+            p2_safe = p2_flip if p2_flip.shape == p1.shape else np.stack([cv2.resize(p2_flip[i], (target_w, target_h)) for i in range(3)])
+            p3_safe = p3 if p3.shape == p1.shape else np.stack([cv2.resize(p3[i], (target_w, target_h)) for i in range(3)])
+            
+            return (p1 + p2_safe + p3_safe) / 3.0
 
         probs_main = get_model_tta(self.model, image_rgb)
         probs_anchor = get_model_tta(self.anchor_model, image_rgb)
@@ -133,12 +143,47 @@ class InferenceEngine:
             
         # Smoothing: Specific kernels for different tissue types
         liver_prob = cv2.GaussianBlur(liver_prob, (9, 9), 0)
-        inst_prob = cv2.GaussianBlur(inst_prob, (5, 5), 0)
+        # Minute Detail: Use finer kernel (3x3) to preserve thin tool tips
+        inst_prob = cv2.GaussianBlur(inst_prob, (3, 3), 0)
         
         # Clinical-Grade Thresholding
         liver_mask = (liver_prob > 0.5).astype(np.uint8)
         inst_mask = (inst_prob > 0.45).astype(np.uint8)
+        
+        # --- COLOR-LOCK SURGICAL OVERRIDE (Refined) ---
+        # Emergency Fix: Force Metallic pixels to be Instruments
+        hsv = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2HSV)
+        
+        # 1. Broaden Metallic Range (Catch Darker Tools)
+        # S < 50 (Very Low Saturation = Grey/White/Black)
+        # V > 40 (Allow darker shadows, but not pitch black)
+        lower_metallic = np.array([0, 0, 40])
+        upper_metallic = np.array([180, 50, 255])
+        metallic_mask = cv2.inRange(hsv, lower_metallic, upper_metallic)
+        
+        # 2. Red-Rejection Filter (The "Anti-Blood" Check)
+        # Metal is Neutral (B ≈ G ≈ R). Tissue is Red (R >> G/B).
+        # If Red is dominant, it's TISSUE, even if it has low saturation (e.g. pale tissue).
+        b, g, r = cv2.split(image_bgr)
+        # Calculate Red Dominance: R should not be significantly larger than B or G
+        # Using floating point for precision
+        r_f, g_f, b_f = r.astype(np.float32), g.astype(np.float32), b.astype(np.float32)
+        red_dominance = (r_f > (g_f * 1.1)) & (r_f > (b_f * 1.1))
+        
+        # Remove Red-Dominant pixels from the Metallic Mask
+        metallic_mask[red_dominance] = 0
+        
+        # Morphological clean (remove spotty noise)
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
+        metallic_mask = cv2.morphologyEx(metallic_mask, cv2.MORPH_OPEN, kernel)
+        metallic_mask = cv2.morphologyEx(metallic_mask, cv2.MORPH_CLOSE, kernel)
+        
+        # FORCE OVERRIDE
+        inst_mask[metallic_mask > 0] = 1
+        liver_mask[metallic_mask > 0] = 0
+        # ------------------------------------
 
+        # Sharp Cut Logic: Ensure tool penetrates cleanly
         liver_mask[inst_mask == 1] = 0
         
         # Analytics: Quantitative Precision

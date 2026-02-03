@@ -136,17 +136,19 @@ def get_pinnacle_transforms(img_size=(512, 512), is_train=True):
                 A.GaussianBlur(blur_limit=3, p=0.2),
                 A.GlassBlur(sigma=0.7, max_delta=2, p=0.1),
             ], p=0.3),
+            # Minute Detail Hardening (High Frequency)
             A.OneOf([
                 A.RandomGamma(gamma_limit=(80, 120), p=0.3),
                 A.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, p=0.3),
-                A.CLAHE(clip_limit=2.0, p=0.2),
-            ], p=0.4),
+                A.CLAHE(clip_limit=4.0, tile_grid_size=(8, 8), p=0.3), # Stronger CLAHE for shadow penetration
+                A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.4), # Highlight edges
+            ], p=0.5),
             A.OneOf([
                 A.ElasticTransform(alpha=1, sigma=50, p=0.2),
                 A.GridDistortion(p=0.2),
                 A.CoarseDropout(max_holes=8, max_height=32, max_width=32, p=0.2), # Smoke/Occlusion Sim
             ], p=0.2),
-            A.Sharpen(alpha=(0.2, 0.5), lightness=(0.5, 1.0), p=0.3), # Essential for tool edges
+            A.Sharpen(alpha=(0.3, 0.6), lightness=(0.5, 1.0), p=0.5), # 50% chance of razor-sharp edges
             A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             ToTensorV2()
         ])

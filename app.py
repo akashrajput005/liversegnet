@@ -5,9 +5,10 @@ Seamless Monolithic Architecture: AI Engine Integrated Directly into UI
 import streamlit as st
 import cv2
 import numpy as np
-from PIL import Image
+import io
 import os
-import time
+import time # Streamlit reload trigger
+from PIL import Image
 from datetime import datetime
 import pandas as pd
 from src.infer import InferenceEngine
@@ -248,7 +249,8 @@ if "👨‍⚕️" in mode:
 
                 # Downloadable Report
                 st.markdown("---")
-                report_bgr = cv2.cvtColor(blended, cv2.COLOR_RGB2BGR)
+                # Use the Active Display Image for the report
+                report_bgr = cv2.cvtColor(display_img, cv2.COLOR_RGB2BGR)
                 st.download_button("📥 Final Clinical Report", cv2.imencode('.png', report_bgr)[1].tobytes(), "surgical_report.png", "image/png", use_container_width=True)
             else:
                 st.info("🔼 Please upload a surgical frame to initiate analysis.")
