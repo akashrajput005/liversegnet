@@ -1,52 +1,37 @@
-# LiverSegNet AI: Advanced Surgical Perception Hub 🩺🚀
+# 🏥 LiverSegNet: Clinical Surgical Vision AI
 
-LiverSegNet is a research-grade medical computer vision system designed for real-time anatomical and instrument segmentation in laparoscopic surgery. It leverages state-of-the-art Deep Learning (DeepLabV3+ & U-Net) with a **Triple-Head Clinical Ensemble** to provide surgeons with critical clinical insights, including tool-to-organ proximity and occlusion hazards.
+**LiverSegNet** is an unmatchable, pinnacle-grade AI system designed for real-time surgical segmentation and clinical analytics. It leverages state-of-the-art architectures (**ResNet101 DeepLabV3+** & **EfficientNet-B4 U-Net**) to identify liver tissue and surgical instruments with absolute precision.
 
-## ✨ Core Features
-- **Triple-Head Clinical Ensemble**: Combines specialized Stage 1 anatomical grounding with precision Stage 2 instrument tracking
-- **Real-Time Clinical Analytics**:
-    - **Occlusion Hazards**: Live calculation of liver area obscured by surgical tools
-    - **Safety Proximity**: Euclidean distance metrics with color-coded safety zones (SAFE/CAUTION/CRITICAL)
-    - **Independent Detection**: Robust organ and instrument status indicators
-- **Premium User Experience**: Glassmorphism-inspired Streamlit dashboard with real-time metrics
-- **Production Ready**: Clean API/UI separation with FastAPI backend
+## 🚀 Quick Launch
+For detailed launch commands and operational procedures, please refer to:
+👉 **[LAUNCH.md](file:///c:/Users/Public/LiverSegNet/LAUNCH.md)**
 
-## 🛠️ Architecture
-- **Backend**: FastAPI with PyTorch (CUDA acceleration)
-- **Frontend**: Streamlit with Custom CSS (Glassmorphism)
-- **Triple-Head Ensemble**: 
-    - **Stage 1 Anchor**: DeepLabV3+ ResNet-50 (2-class, anatomical specialist)
-    - **U-Net Anchor**: ResNet-34 (3-class, robust baseline)
-    - **Advanced Main**: DeepLabV3+ ResNet-50 (3-class, precision tracker)
+## 🏗️ System Architecture
+The system is decoupled for maximum performance and reliability:
+- **Backend (Inference API)**: A FastAPI-based engine powered by **Test Time Augmentation (TTA)** and **Ensemble Probability Fusion**.
+- **Frontend (Surgeon Dashboard)**: A premium "Cyber-Surgical" Streamlit UI providing live analytics, pixel counts, and safety monitoring.
+- **Advanced Training**: An automated multi-stage pipeline utilizing a unified dataset of **8,000+ frames**.
 
-## 🚀 Quick Start (Local)
+## 📁 Directory Structure
+```
+├── app.py                # Premium Surgeon Dashboard (Streamlit)
+├── src/
+│   ├── api.py            # High-performance Inference API
+│   ├── infer.py          # Pinnacle Inference Engine (TTA/Ensemble)
+│   ├── model.py          # Unified Architecture & Quad-Fusion Loss
+│   ├── dataset.py        # Advanced Surgical Augmentations
+│   └── train_pinnacle.py # Automated Multi-Stage Training
+├── models/               # Standardized Weights (.pth)
+├── logs/                 # Clinical CSV Metrics & Historical Data
+└── LAUNCH.md             # Command Reference Guide
+```
 
-### Option 1: One-Click Startup (Easiest)
-Simply double-click `start.bat` in the project root!
-
-### Option 2: Manual Startup
-See `STARTUP_GUIDE.md` for detailed commands.
-
-### Requirements
-- NVIDIA GPU with CUDA support (RTX 3050+ recommended)
-- Python 3.8+
-- Dependencies: `pip install -r requirements.txt`
-
-## 📂 Project Structure
-- `src/`: Core neural logic and training scripts
-- `ui/`: Dashboard and Backend API
-- `models/`: Pre-trained weights (`.pth` files excluded from Git - download separately)
-- `tools/`: Data preprocessing and evaluation utilities
-- `configs/`: Centralized parameters for hot-swapping engines
-- `start.bat`: One-click application launcher
-- `STARTUP_GUIDE.md`: Comprehensive startup and troubleshooting guide
-
-## 🧪 Test Files
-Sample surgical frames and videos are provided for testing:
-- `surg_interaction_*.png`: Complex surgical scenes with both organs and instruments
-- `test_surgical_clip.avi`: 30-frame video sequence
-
-**Note**: Model weights (`.pth` files) are excluded from Git due to size. Download or train models separately.
+## 🔬 Core Clinical Features
+- **Quad-Fusion Loss**: Specialized optimization for Shape, Overlap, Edges, and Class Imbalance.
+- **Anatomical Grounding**: Real-time pixel and region counting for clinical precision.
+- **Test Time Augmentation (TTA)**: Multi-view cross-validation for zero-jitter masks.
+- **Surgical Robustness**: Built-in simulations for smoke, lens blur, and lighting distortions.
+- **Surgeon Control**: Dynamic overlay opacity and interactive risk assessment.
 
 ---
 *Developed for Advanced Surgical Intelligence Applications*

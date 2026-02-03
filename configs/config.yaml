@@ -29,4 +29,4 @@ stage2:
 stage3:
   epochs: 30
   lr: 1e-4
-unified_dataset_path: C:\Users\akash\Downloads\cholecseg8k
+unified_dataset_path: C:\Users\Public\LiverSegNet\data
