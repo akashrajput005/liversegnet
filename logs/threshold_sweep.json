@@ -1,0 +1,1014 @@
+{
+  "best": {
+    "liver_dice": 0.25637283942727235,
+    "instrument_dice": 0.014283749347682338,
+    "instrument_precision": 0.22510294251413276,
+    "instrument_recall": 0.007453943560171355,
+    "score": 0.1891930832634706,
+    "liver_threshold": 0.45,
+    "liver_bg_margin": 0.0,
+    "instrument_threshold": 0.6
+  },
+  "all": [
+    {
+      "liver_dice": 0.25637283942727235,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.1891930832634706,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.25637283942727235,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.18214041793183322,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.25637283942727235,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.17208906690864223,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.25637283942727235,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.16882891360836194,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.25637283942727235,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.1649535925601492,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.2507911828462521,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18807675194726653,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.2507911828462521,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.18102408661562916,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.2507911828462521,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.17097273559243817,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.2507911828462521,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.1677125822921579,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.2507911828462521,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.16383726124394513,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.2423503963446337,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18638859464694285,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.2423503963446337,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17933592931530548,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.2423503963446337,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.1692845782921145,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.2423503963446337,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.16602442499183423,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.2423503963446337,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.16214910394362145,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.23387694364359707,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18469390410673553,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.23387694364359707,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17764123877509816,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.23387694364359707,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.16758988775190717,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.23387694364359707,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.1643297344516269,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.23387694364359707,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.16045441340341413,
+      "liver_threshold": 0.45,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.25637274829268414,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18919306503655295,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.25637274829268414,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.18214039970491558,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.25637274829268414,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.1720890486817246,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.25637274829268414,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.1688288953814443,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.25637274829268414,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.16495357433323155,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.2507911828462521,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18807675194726653,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.2507911828462521,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.18102408661562916,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.2507911828462521,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.17097273559243817,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.2507911828462521,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.1677125822921579,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.2507911828462521,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.16383726124394513,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.2423503963446337,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18638859464694285,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.2423503963446337,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17933592931530548,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.2423503963446337,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.1692845782921145,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.2423503963446337,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.16602442499183423,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.2423503963446337,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.16214910394362145,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.23387694364359707,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18469390410673553,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.23387694364359707,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17764123877509816,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.23387694364359707,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.16758988775190717,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.23387694364359707,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.1643297344516269,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.23387694364359707,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.16045441340341413,
+      "liver_threshold": 0.5,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18355548480972916,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17650281947809182,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.16645146845490083,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.16319131515462054,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.1593159941064078,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18355548480972916,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17650281947809182,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.16645146845490083,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.16319131515462054,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.1593159941064078,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18355548480972916,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17650281947809182,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.16645146845490083,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.16319131515462054,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.1593159941064078,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.18355548480972916,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17650281947809182,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.16645146845490083,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.16319131515462054,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.22818484715856532,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.1593159941064078,
+      "liver_threshold": 0.55,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.17788343491198644,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17083076958034907,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.16077941855715808,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.1575192652568778,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.15364394420866503,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.17788343491198644,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17083076958034907,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.16077941855715808,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.1575192652568778,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.15364394420866503,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.17788343491198644,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17083076958034907,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.16077941855715808,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.1575192652568778,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.15364394420866503,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.17788343491198644,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.17083076958034907,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.16077941855715808,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.1575192652568778,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.19982459766985158,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.15364394420866503,
+      "liver_threshold": 0.6,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.1721140712948824,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.16506140596324503,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.15501005494005404,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.15174990163977375,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.147874580591561,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.0,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.1721140712948824,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.16506140596324503,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.15501005494005404,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.15174990163977375,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.147874580591561,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.02,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.1721140712948824,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.16506140596324503,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.15501005494005404,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.15174990163977375,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.147874580591561,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.05,
+      "instrument_threshold": 0.8
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.014283749347682338,
+      "instrument_precision": 0.22510294251413276,
+      "instrument_recall": 0.007453943560171355,
+      "score": 0.1721140712948824,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.6
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.011966322250617127,
+      "instrument_precision": 0.21412097599375887,
+      "instrument_recall": 0.006205311482723102,
+      "score": 0.16506140596324503,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.65
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.009815349226632901,
+      "instrument_precision": 0.1980857152964353,
+      "instrument_recall": 0.005057722145117838,
+      "score": 0.15501005494005404,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.7
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.007681941008331583,
+      "instrument_precision": 0.19336326253540193,
+      "instrument_recall": 0.003933674570502172,
+      "score": 0.15174990163977375,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.75
+    },
+    {
+      "liver_dice": 0.1709777795843314,
+      "instrument_dice": 0.005429402369299106,
+      "instrument_precision": 0.1876552403347248,
+      "instrument_recall": 0.0027631052770718738,
+      "score": 0.147874580591561,
+      "liver_threshold": 0.65,
+      "liver_bg_margin": 0.08,
+      "instrument_threshold": 0.8
+    }
+  ]
+}

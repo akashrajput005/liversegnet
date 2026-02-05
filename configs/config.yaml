@@ -1,32 +1,41 @@
-active_encoder: efficientnet-b4
-active_model: unet
-batch_size: 4
-cholecinstanceseg_path: C:\Users\akash\Downloads\cholecinstanceseg\cholecinstanceseg
-cholecseg8k_path: C:\Users\akash\Downloads\cholecseg8k
-cholec80_path: C:\Users\akash\Downloads\cholec80
-endovis_path: C:\Users\akash\Downloads\endovis
-reference_images_path: C:\Users\akash\Downloads\cholecinstance_seg_reference_image_set
-seed: 42
-val_ratio: 0.15
-img_size:
-- 480
-- 854
-input_size:
-- 256
-- 256
-labels:
-  background: 0
-  instrument: 2
-  liver: 1
-num_workers: 2
-reference_images_path: C:\Users\akash\Downloads\cholecinstance_seg_reference_image_set
-stage1:
-  epochs: 25
-  lr: 1e-4
-stage2:
-  epochs: 60
-  lr: 3e-5
-stage3:
-  epochs: 30
-  lr: 1e-4
-unified_dataset_path: C:\Users\Public\LiverSegNet\data
+project: LiverSegNet
+data:
+  cholecseg8k: C:/Users/akash/Downloads/cholecseg8k
+  cholecinstanceseg: C:/Users/akash/Downloads/cholecinstanceseg
+  cholecinstanceseg_images: C:/Users/akash/Downloads/cholecinstance_seg_reference_image_set
+training:
+  image_size: 448
+  batch_size: 2
+  accumulation_steps: 2
+  epochs: 45
+  early_stopping_patience: 10
+  learning_rate: 3e-4
+  weight_decay: 1e-4
+  mixed_precision: true
+model:
+  architecture: deeplabv3plus
+  encoder: resnet101
+  pretrained: imagenet
+  classes: 3
+loss:
+  focal_gamma: 2.5
+  boundary_weight: 1.2
+  tversky_alpha: 0.7
+  tversky_beta: 0.3
+  dice_weight_bg: 0.5
+  dice_weight_liver: 1.0
+  dice_weight_inst: 1.2
+inference:
+  instrument_threshold: 0.6
+  liver_threshold: 0.45
+  liver_bg_margin: 0.0
+diagnosis:
+  enabled: false
+logging:
+  save_metric: instrument_precision
+  model_path: models/best_precision.pth
+  encoder_checkpoints:
+    resnet101: models/best_precision.pth
+    resnet50: models/best_precision_r50.pth
+ui:
+  default_encoder: resnet101

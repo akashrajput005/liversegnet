@@ -1,0 +1,9 @@
+{
+  "liver_dice": 1.0,
+  "instrument_dice": 0.9061626951674342,
+  "instrument_precision": 0.9999999996372869,
+  "instrument_recall": 0.8284254805203048,
+  "instrument_false_positive": 0,
+  "pixel_area_liver": 4695,
+  "pixel_area_instrument": 2757
+}
