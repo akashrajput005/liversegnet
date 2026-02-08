@@ -2,6 +2,11 @@
 
 LiverSegNet is a formalized hybrid perception system designed for real-time laparoscopic anatomical segmentation and kinetic safety assessment. It bridges the gap between deep learning and clinical reality by integrating multiple signal streams.
 
+## Clinical Portfolio & Technical Advocacy
+*   [**The Hybrid Imperative**](docs/hybrid_justification.md): Why we rejected "Pure AI" for surgical navigation.
+*   [**Failure-Case Gallery**](docs/failure_case_gallery.md): How we handle shadows, glare, and mimicry.
+*   [**Architectural Blueprint**](docs/architecture.md): Full system flow and signal definitions.
+
 ## Key Features
 *   **Hybrid Perception Architecture**: Trio-signal processing (Neural, Deterministic, Heuristic).
 *   **Multicolor Anatomical Recovery (MAR)**: Physically-informed BGR discovery for shadowed anatomy.
