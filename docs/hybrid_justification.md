@@ -28,5 +28,3 @@ Geometric constraints (FOV Circular Masking, Mask Shielding, and EMA Smoothing) 
 By formalizing the **Kill-Switchable Heuristic Layer**, LiverSegNet provides surgeons with **Transparency**. We don't just ask the surgeon to "Trust the AI"; we show them exactly which signal (Neural, Heuristic, or Deterministic) is currently driving the navigation.
 
 This hybrid approach transforms a "Black Box" into a **Transparent Surgical Guardrail**.
-
-All work is in English.🛡️

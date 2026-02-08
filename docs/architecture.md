@@ -58,5 +58,3 @@ graph TD
 *   **NEURAL**: Deep learning posterior probabilities (DeepLabV3+ & UNet).
 *   **DETERMINISTIC**: Hard geometric constraints (FOV masking, Morphology).
 *   **HEURISTIC**: Physically-informed color recovery signatures (BGR MAR).
-
-All work is in English.🛡️

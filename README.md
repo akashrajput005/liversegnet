@@ -45,4 +45,4 @@ LiverSegNet V2.2.1-HYBRID utilizes a **Classified Signal Pipeline**:
 *   **Warning Threshold**: 50.5 px
 *   **Temporal Stability**: EMA-weighted instrument trajectory smoothing.
 
-*This system is formalized and frozen under v2.2.1-hybrid governance.* All work is in English.🛡️
+*This system is formalized and frozen under v2.2.1-hybrid governance.*

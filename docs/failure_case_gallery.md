@@ -26,5 +26,3 @@ This gallery documents how LiverSegNet handles the "failures" that typically cri
 
 ---
 **Technical Note**: These cases prove that in surgery, **Robustness is more valuable than raw Accuracy.** 🟢
-
-All work is in English.🛡️
