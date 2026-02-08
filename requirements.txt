@@ -6,3 +6,4 @@ opencv-python-headless
 psutil
 scipy
 pillow
+huggingface_hub

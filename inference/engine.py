@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 import cv2
+import os
 from models.deeplab_liver import LiverSegModelA
 from models.unet_tools import UNetResNet34
 from utils.transforms import Compose, Resize, ToTensor, Normalize
@@ -8,8 +9,30 @@ from risk.geometry_logic import GeometrySafetyLayer
 
 class ClinicalInferenceEngine:
     def __init__(self, model_a_path, model_b_path, device='cuda'):
+        """
+        V2.2.2: Added support for automatic weight fetching from Hugging Face if local files are missing.
+        """
         self.device = torch.device(device if torch.cuda.is_available() else 'cpu')
         
+        # --- MODEL A: ANATOMY ---
+        if not os.path.exists(model_a_path):
+            try:
+                from huggingface_hub import hf_hub_download
+                print(f"Local Model A not found. Fetching from Cloud...")
+                # Authoritative Repo: akashrajput005/liversegnet-v2
+                model_a_path = hf_hub_download(repo_id="akashrajput005/liversegnet-v2", filename="model_A_hybrid.pth")
+            except Exception as e:
+                print(f"Cloud Fetch Model A FAILED: {e}")
+
+        # --- MODEL B: INSTRUMENTS ---
+        if not os.path.exists(model_b_path):
+            try:
+                from huggingface_hub import hf_hub_download
+                print(f"Local Model B not found. Fetching from Cloud...")
+                model_b_path = hf_hub_download(repo_id="akashrajput005/liversegnet-v2", filename="model_B_hybrid.pth")
+            except Exception as e:
+                print(f"Cloud Fetch Model B FAILED: {e}")
+
         # Initialize Models (V2.0.2: Stage 2 for both Anatomy and Tools)
         self.model_a = LiverSegModelA(num_classes=5, pretrained=False).to(self.device).eval()
         self.model_b = UNetResNet34(num_classes=5, pretrained=False).to(self.device).eval()
