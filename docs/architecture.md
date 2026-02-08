@@ -2,6 +2,8 @@
 
 The system is designed as a **Hybrid Perception Pipeline**, combining neural deep learning, deterministic geometric guards, and heuristic color-based discovery.
 
+![LiverSegNet Hybrid Architecture](architecture_diagram.svg)
+
 ```mermaid
 graph TD
     subgraph "Input Layer"

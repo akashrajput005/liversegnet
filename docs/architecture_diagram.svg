@@ -1,0 +1,111 @@
+<svg width="1400" height="900" viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+
+  <!-- WHITE BACKGROUND (EXPLICIT FOR PUBLICATION) -->
+  <rect x="0" y="0" width="1400" height="900" fill="#ffffff"></rect>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#000"></path>
+    </marker>
+  </defs>
+
+  <!-- TITLE -->
+  <text x="700" y="40" text-anchor="middle" font-size="24" font-weight="700">
+    LiverSegNet V2.2.x — Hybrid Surgical Perception Architecture
+  </text>
+
+  <!-- INPUT -->
+  <rect x="40" y="120" width="260" height="80" fill="#ffffff" stroke="#000" stroke-width="2"></rect>
+  <text x="170" y="165" text-anchor="middle" font-size="14" font-weight="700">
+    Endoscopic Frame
+  </text>
+
+  <!-- PREPROCESSING -->
+  <rect x="360" y="120" width="300" height="80" fill="#ffffff" stroke="#000" stroke-width="2"></rect>
+  <text x="510" y="155" text-anchor="middle" font-size="13" font-weight="700">
+    Preprocessing
+  </text>
+  <text x="510" y="175" text-anchor="middle" font-size="11">
+    Resize · Normalize · Lens Preparation
+  </text>
+
+  <!-- NEURAL LAYER -->
+  <rect x="360" y="260" width="300" height="150" fill="#ffffff" stroke="#1e88e5" stroke-width="2.5"></rect>
+  <text x="510" y="285" text-anchor="middle" font-size="13" font-weight="700">
+    Neural Perception Layer
+  </text>
+
+  <rect x="380" y="305" width="260" height="40" fill="#ffffff" stroke="#1e88e5" stroke-width="1.5"></rect>
+  <text x="510" y="330" text-anchor="middle" font-size="11">
+    Model A — Anatomy (DeepLabV3+)
+  </text>
+
+  <rect x="380" y="355" width="260" height="40" fill="#ffffff" stroke="#1e88e5" stroke-width="1.5"></rect>
+  <text x="510" y="380" text-anchor="middle" font-size="11">
+    Model B — Instruments (UNet-ResNet34)
+  </text>
+
+  <!-- DETERMINISTIC LAYER -->
+  <rect x="720" y="260" width="300" height="150" fill="#ffffff" stroke="#2e7d32" stroke-width="2.5"></rect>
+  <text x="870" y="285" text-anchor="middle" font-size="13" font-weight="700">
+    Deterministic Enhancement Layer
+  </text>
+  <text x="870" y="315" text-anchor="middle" font-size="11">
+    FOV Mask · Connected Components
+  </text>
+  <text x="870" y="335" text-anchor="middle" font-size="11">
+    Instrument Shielding
+  </text>
+
+  <!-- HEURISTIC LAYER -->
+  <rect x="360" y="460" width="660" height="140" fill="#ffffff" stroke="#ef6c00" stroke-width="2.5"></rect>
+  <text x="690" y="485" text-anchor="middle" font-size="13" font-weight="700">
+    Heuristic Recovery Layer (Runtime-Disableable)
+  </text>
+  <text x="690" y="515" text-anchor="middle" font-size="11">
+    Multicolor Anatomical Recovery (BGR Signatures)
+  </text>
+  <text x="690" y="535" text-anchor="middle" font-size="11">
+    Hybrid Fusion — Neural Seeds + Color Discovery
+  </text>
+
+  <!-- SAFETY LAYER -->
+  <rect x="720" y="640" width="300" height="130" fill="#ffffff" stroke="#c2185b" stroke-width="2.5"></rect>
+  <text x="870" y="665" text-anchor="middle" font-size="13" font-weight="700">
+    Geometry Safety Layer
+  </text>
+  <text x="870" y="695" text-anchor="middle" font-size="11">
+    Kinetic Telemetry (Velocity · Distance)
+  </text>
+  <text x="870" y="715" text-anchor="middle" font-size="11">
+    Safety Vector (SAFE / WARNING / CRITICAL)
+  </text>
+
+  <!-- OUTPUT -->
+  <rect x="1080" y="460" width="280" height="120" fill="#ffffff" stroke="#000" stroke-width="2"></rect>
+  <text x="1220" y="495" text-anchor="middle" font-size="13" font-weight="700">
+    Clinical Outputs
+  </text>
+  <text x="1220" y="520" text-anchor="middle" font-size="11">
+    Streamlit Dashboard
+  </text>
+  <text x="1220" y="540" text-anchor="middle" font-size="11">
+    Audit Logs &amp; Comparative Reports
+  </text>
+
+  <!-- ARROWS -->
+  <line x1="300" y1="160" x2="360" y2="160" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"></line>
+
+  <line x1="510" y1="200" x2="510" y2="260" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"></line>
+
+  <line x1="660" y1="335" x2="720" y2="335" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"></line>
+
+  <line x1="510" y1="410" x2="510" y2="460" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"></line>
+
+  <line x1="870" y1="410" x2="870" y2="460" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"></line>
+
+  <line x1="870" y1="600" x2="870" y2="640" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"></line>
+
+  <line x1="1020" y1="705" x2="1080" y2="520" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"></line>
+
+</svg>
