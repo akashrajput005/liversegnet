@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# LiverSegNet Heavy Artifacts (Ignore for GitHub limits)
+data/
+archive/
+research/
+*.pth
+*.log
+*.png
+*.jpg
+*.jpeg
+!README.md
+!docs/architecture.md
+!production_v2_2_0/VERSION.txt
+
+# Production Evidence (Optional to keep in Repo, better in Releases)
+production_v2_2_0/weights/
+production_v2_2_0/audit_evidence/
+
+# IDEs
+.vscode/
+.idea/
+.streamlit/config.toml
