@@ -127,10 +127,10 @@ st.sidebar.markdown(f"**CPU Load**: {psutil.cpu_percent()}%")
 st.sidebar.markdown("---")
 st.sidebar.markdown("**Integrity**: <span style='color: #00ffa3;'>VERIFIED</span>", unsafe_allow_html=True)
 st.sidebar.markdown(f"Mode: **HYBRID {'(HEURISTICS ON)' if use_heuristics else '(NEURAL ONLY)'}**")
-st.sidebar.markdown("Version: **V2.2.1-HYBRID**")
+st.sidebar.markdown("Version: **V2.2.7-HYBRID**")
 
 @st.cache_resource
-def load_inference_engine(kernel_tag="V2.2.1-HYBRID"):
+def load_inference_engine(kernel_tag="V2.2.7-HYBRID"):
     # V2.2.1: UI Hardening & Threshold Standardization
     model_a_path = "./production_v2_2_0/weights/model_A_hybrid.pth"
     model_b_path = "./production_v2_2_0/weights/model_B_hybrid.pth"
@@ -138,7 +138,7 @@ def load_inference_engine(kernel_tag="V2.2.1-HYBRID"):
 
 try:
     # Use a unique tag to force re-instantiation across UI refreshes
-    engine = load_inference_engine(kernel_tag="V2-2-1-HYBRID")
+    engine = load_inference_engine(kernel_tag="V2-2-7-HYBRID")
 except Exception as e:
     st.error(f"Inference Engine Offline: {e}")
     engine = None
@@ -207,9 +207,15 @@ with tab1:
             alpha = 0.35
             augmented_frame = cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0)
             
-            # Main Viewport
+            # Main Viewport (Side-by-Side)
             st.markdown("#### Surgical AI Navigation (V2.2.1-HYBRID)")
-            st.image(cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB), use_column_width=True)
+            v_col1, v_col2 = st.columns(2)
+            
+            with v_col1:
+                st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Original Sequence", use_column_width=True)
+            
+            with v_col2:
+                st.image(cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB), caption="AI Perception Layer", use_column_width=True)
 
             # Legends
             st.markdown("---")
@@ -348,4 +354,4 @@ with tab3:
         st.warning("Please upload a frame to view confidence diagnostics.")
 
 st.markdown("---")
-st.markdown(f"**LiverSegNet v2.2.1-HYBRID** | Protocol: Hybrid Formalization | Kinetic Safety: Active (20.5/50.5 px)")
+st.markdown(f"**LiverSegNet v2.2.7-HYBRID** | Protocol: UI Restoration | Kinetic Safety: Active (20.5/50.5 px)")
