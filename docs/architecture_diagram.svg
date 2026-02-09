@@ -11,7 +11,7 @@
 
   <!-- TITLE -->
   <text x="700" y="40" text-anchor="middle" font-size="24" font-weight="700">
-    LiverSegNet V2.2.x — Hybrid Surgical Perception Architecture
+    LiverSegNet V3.0.0 — Hybrid Surgical Perception Architecture
   </text>
 
   <!-- INPUT -->
@@ -51,10 +51,10 @@
     Deterministic Enhancement Layer
   </text>
   <text x="870" y="315" text-anchor="middle" font-size="11">
-    FOV Mask · Connected Components
+    FOV Mask · Clinical Size Filter
   </text>
   <text x="870" y="335" text-anchor="middle" font-size="11">
-    Instrument Shielding
+    Instrument Shielding · Connected Comp.
   </text>
 
   <!-- HEURISTIC LAYER -->
@@ -63,7 +63,7 @@
     Heuristic Recovery Layer (Runtime-Disableable)
   </text>
   <text x="690" y="515" text-anchor="middle" font-size="11">
-    Multicolor Anatomical Recovery (BGR Signatures)
+    Multicolor Anatomical Recovery (HSV/BGR Signatures)
   </text>
   <text x="690" y="535" text-anchor="middle" font-size="11">
     Hybrid Fusion — Neural Seeds + Color Discovery
@@ -87,7 +87,7 @@
     Clinical Outputs
   </text>
   <text x="1220" y="520" text-anchor="middle" font-size="11">
-    Streamlit Dashboard
+    Dual-Stream Visual Hub
   </text>
   <text x="1220" y="540" text-anchor="middle" font-size="11">
     Audit Logs &amp; Comparative Reports
