@@ -120,7 +120,8 @@ class ClinicalInferenceEngine:
         mask_a_raw[probs_a_np[1] > 0.08] = 1
         # Other classes - Neural Signal (Argmax)
         argmax_a = torch.argmax(output_a, dim=1).squeeze().cpu().numpy()
-        mask_a_raw[(argmax_a == 2) & (probs_a_np[2] > 0.20)] = 2
+        # Gallbladder (Class 2) - Balanced Neural Signal (V2.2.9 sensitivity recalibration)
+        mask_a_raw[(argmax_a == 2) & (probs_a_np[2] > 0.12)] = 2
         mask_a_raw[(argmax_a == 3) & (probs_a_np[3] > 0.25)] = 3
         mask_a_raw[(argmax_a == 4) & (probs_a_np[4] > 0.30)] = 4
         
@@ -142,10 +143,16 @@ class ClinicalInferenceEngine:
             
             frame_tactical = cv2.resize(frame, (w_t, h_t))
             img_bgr = frame_tactical.astype(np.float32)
+            img_hsv = cv2.cvtColor(frame_tactical, cv2.COLOR_BGR2HSV)
             
             # Physical Color Kernels (Heuristic Discovery)
+            # p_liver: BGR refined for deep red/brown
             p_liver = (img_bgr[:,:,2] > 30) & (img_bgr[:,:,2] > img_bgr[:,:,1]*1.2) & (img_bgr[:,:,2] > img_bgr[:,:,0]*1.2)
-            p_gb = (img_bgr[:,:,1] > 50) & (img_bgr[:,:,1] > img_bgr[:,:,0]*1.1) & (np.abs(img_bgr[:,:,2] - img_bgr[:,:,1]) < 60)
+            
+            # p_gb: HSV space (V2.2.9: Resilient to lighting, targeting 20-60 degrees hue)
+            h, s, v = cv2.split(img_hsv)
+            p_gb = (h >= 20) & (h <= 60) & (s > 40) & (v > 30)
+            
             p_fascia = (img_bgr[:,:,2] > 150) & (img_bgr[:,:,1] > 120) & (img_bgr[:,:,0] > 80)
             
             p_liver &= (fov_mask == 1)
@@ -158,7 +165,8 @@ class ClinicalInferenceEngine:
                 for i in range(1, num_labels):
                     area = stats[i, cv2.CC_STAT_AREA]
                     intersect = np.any((labels == i) & (model_seeds == 1))
-                    if intersect or (cid == 1 and area > 8000) or (cid == 2 and area > 1500):
+                    # GB Area sensitivity increased: 1500 -> 1000px
+                    if intersect or (cid == 1 and area > 8000) or (cid == 2 and area > 1000):
                         mask_a[labels == i] = cid
             
             # Tag Fascia as Background/Noise (Deterministic suppression of heuristics)
