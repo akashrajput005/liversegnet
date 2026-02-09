@@ -1,4 +1,4 @@
-# LiverSegNet V2.2.1 Architecture
+# LiverSegNet V3.0.0 Architecture
 
 The system is designed as a **Hybrid Perception Pipeline**, combining neural deep learning, deterministic geometric guards, and heuristic color-based discovery.
 

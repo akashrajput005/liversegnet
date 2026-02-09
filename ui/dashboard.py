@@ -127,10 +127,10 @@ st.sidebar.markdown(f"**CPU Load**: {psutil.cpu_percent()}%")
 st.sidebar.markdown("---")
 st.sidebar.markdown("**Integrity**: <span style='color: #00ffa3;'>VERIFIED</span>", unsafe_allow_html=True)
 st.sidebar.markdown(f"Mode: **HYBRID {'(HEURISTICS ON)' if use_heuristics else '(NEURAL ONLY)'}**")
-st.sidebar.markdown("Version: **V2.2.9-HYBRID**")
+st.sidebar.markdown("Version: **V3.0.0-HYBRID**")
 
 @st.cache_resource
-def load_inference_engine(kernel_tag="V2.2.9-HYBRID"):
+def load_inference_engine(kernel_tag="V3.0.0-HYBRID"):
     # V2.2.1: UI Hardening & Threshold Standardization
     model_a_path = "./production_v2_2_0/weights/model_A_hybrid.pth"
     model_b_path = "./production_v2_2_0/weights/model_B_hybrid.pth"
@@ -138,7 +138,7 @@ def load_inference_engine(kernel_tag="V2.2.9-HYBRID"):
 
 try:
     # Use a unique tag to force re-instantiation across UI refreshes
-    engine = load_inference_engine(kernel_tag="V2-2-9-HYBRID")
+    engine = load_inference_engine(kernel_tag="V3-0-0-HYBRID")
 except Exception as e:
     st.error(f"Inference Engine Offline: {e}")
     engine = None
@@ -354,4 +354,4 @@ with tab3:
         st.warning("Please upload a frame to view confidence diagnostics.")
 
 st.markdown("---")
-st.markdown(f"**LiverSegNet v2.2.9-HYBRID** | Protocol: GB Recovery Optimization | Kinetic Safety: Active (20.5/50.5 px)")
+st.markdown(f"**LiverSegNet v3.0.0-HYBRID** | Protocol: Gold Standard Release | Kinetic Safety: Active (20.5/50.5 px)")

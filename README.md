@@ -1,4 +1,5 @@
-# LiverSegNet: Hybrid Surgical Perception System (V2.2.1-HYBRID)
+# LiverSegNet V3.0.0.🛡️
+### Hybrid Surgical Perception & Kinetic Safety Layer
 [**Live Demo (Streamlit Cloud)**](https://liversegnet-nq3ncgte2bappazv7kbu7e.streamlit.app/)
 
 LiverSegNet is a formalized hybrid perception system designed for real-time laparoscopic anatomical segmentation and kinetic safety assessment. It bridges the gap between deep learning and clinical reality by integrating multiple signal streams.
