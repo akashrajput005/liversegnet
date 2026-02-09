@@ -166,15 +166,30 @@ class ClinicalInferenceEngine:
 
         # --- [6. FINAL REFINEMENT: DETERMINISTIC] ---
         final_processed_mask = np.zeros_like(mask_a)
+        # Clinical Size Gates (V2.2.8): Purging phantom detections
+        SIZE_GATES = {
+            1: 800,  # Liver must be > 800px
+            2: 400   # Gallbladder must be > 400px
+        }
+        
         for cid in [2, 1]:
             mass_seed = (mask_a == cid).astype(np.uint8)
             if np.any(mass_seed):
+                # 1. Fill holes and consolidate
                 mass = cv2.dilate(mass_seed, np.ones((5,5), np.uint8), iterations=1)
                 mass = cv2.morphologyEx(mass, cv2.MORPH_CLOSE, np.ones((31,31), np.uint8))
                 cnts, _ = cv2.findContours(mass, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
                 for cnt in cnts:
                     cv2.fillPoly(mass, [cnt], 1)
-                final_processed_mask[(mass == 1) & (final_processed_mask == 0)] = cid
+                
+                # 2. Clinical Size Filter (Aggressive Noise Suppression)
+                num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(mass, connectivity=8)
+                refined_mass = np.zeros_like(mass)
+                for i in range(1, num_labels):
+                    if stats[i, cv2.CC_STAT_AREA] >= SIZE_GATES.get(cid, 500):
+                        refined_mass[labels == i] = 1
+                
+                final_processed_mask[(refined_mass == 1) & (final_processed_mask == 0)] = cid
         mask_a = final_processed_mask
 
         # --- [7. TOOL PERCEPTION: NEURAL + DETERMINISTIC] ---
