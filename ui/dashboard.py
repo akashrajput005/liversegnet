@@ -17,7 +17,7 @@ importlib.reload(inference.engine)
 from inference.engine import ClinicalInferenceEngine
 
 # Custom Styling for Clinical Aesthetics
-st.set_page_config(page_title="LiverSegNet - Surgical Perception Hub", layout="wide")
+st.set_page_config(page_title="LiverSegNet: Resilient Hybrid Surgical Perception", layout="wide")
 
 st.markdown("""
 <style>
