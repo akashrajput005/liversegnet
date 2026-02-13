@@ -36,7 +36,7 @@ LiverSegNet/
 2.  **Execute Audit**: `python master_diag.py`
 
 ## Architecture: The Hybrid Edge
-LiverSegNet V2.2.1-HYBRID utilizes a **Classified Signal Pipeline**:
+LiverSegNet V3.0.0-HYBRID utilizes a **Classified Signal Pipeline**:
 1.  **NEURAL**: Primary organ/tool localization using DeepLabV3+ and UNet.
 2.  **DETERMINISTIC**: Hard geometric filters, FOV masking, and anatomical shielding.
 3.  **HEURISTIC**: BGR color-consistent growth (MAR) for recovering attenuated neural signals.
@@ -46,4 +46,4 @@ LiverSegNet V2.2.1-HYBRID utilizes a **Classified Signal Pipeline**:
 *   **Warning Threshold**: 50.5 px
 *   **Temporal Stability**: EMA-weighted instrument trajectory smoothing.
 
-*This system is formalized and frozen under v2.2.1-hybrid governance.*
+*This system is formalized and frozen under V3.0.0-HYBRID governance.*
