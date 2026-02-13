@@ -1,5 +1,5 @@
 # Failure-Case Gallery: Resilient Surgical Navigation
-**LiverSegNet V2.2.x Edge-Case Performance Report**
+**LiverSegNet V3.0.0 Edge-Case Resilience Report**
 
 This gallery documents how LiverSegNet handles the "failures" that typically cripple standard medical AI models.
 
@@ -7,7 +7,7 @@ This gallery documents how LiverSegNet handles the "failures" that typically cri
 *   **The Problem**: In deep anatomical pockets (Video 01/Frame 99), neural probability drops below the detection threshold. 
 *   **Pure AI Result**: The liver "disappears," causing the safety vector to report "SAFE" incorrectly while an instrument is actually inches from anatomy.
 *   **LiverSegNet Resilience**: The **Heuristic Layer (MAR)** detects the BGR signature and "paints back" the missing anatomy.
-*   **Evidence**: See [Audit Neural vs Hybrid](file:///C:/Users/akash/.gemini/antigravity\brain\dfcfe250-45a8-4d85-bb3c-67f66b98c628\walkthrough.md#L33-L40).
+*   **Evidence**: See [Audit Neural vs Hybrid](walkthrough.md#L30-L33).
 
 ## Case 2: The "Fascial Mimicry" False Positive
 *   **The Problem**: White connective tissue (fascia) often has similar texture to the gallbladder wall.
@@ -25,4 +25,4 @@ This gallery documents how LiverSegNet handles the "failures" that typically cri
 *   **LiverSegNet Resilience**: **EMA Temporal Smoothing** and **Velocity-Adjusted Risk Buffers** stabilize the safety vector, providing a calm, usable telemetry stream.
 
 ---
-**Technical Note**: These cases prove that in surgery, **Robustness is more valuable than raw Accuracy.** 🟢
+**Technical Note**: These cases prove that in surgery, **Robustness is the primary clinical metric.** LiverSegNet V3.0.0 achieves this via a multi-signal safety consensus. 🟢

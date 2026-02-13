@@ -1,15 +1,11 @@
-# LiverSegNet System Specification — V2.0.7 (PRODUCTION - RECOVERED)
+# LiverSegNet System Specification — V3.0.0 (GOLD RELEASE)
 
 ## Overview
-LiverSegNet is a clinical-grade dual-stream surgical perception system. Version 2.0.7 incorporates the **Clinical Recovery Protocol**, eliminating anatomical fragmentation and enforcing solid-organ contiguity.
+LiverSegNet is a clinical-grade dual-stream surgical perception system. Version 3.0.0 incorporates the **Hybrid Perception Pipeline**, combining neural inference with deterministic geometric guards and HSV-resilient heuristic discovery.
 
 ## 1. Neural Architecture
-### Model A (Anatomy) — V2.0.7 RECOVERED
-- **Architecture**: DeepLabV3+ (ResNet50).
-- **Segmentation**: Stage 2 (5-class native: Background, Liver, Gallbladder, GI Tract, Other).
-- **Clinical Proxy**: Supervised by deterministic, solid parenchymal masks (Erosion + LCC filtering).
-- **Anatomical Contiguity**: Enforces **Exactly 1 component per organ** via backend post-processing.
-- **Confidence Layer**: Filtered at **0.3 probability threshold** for zero-flicker localization.
+- **Neural Thresholds**: Class-specific sensitivity (Liver: 0.08, GB: 0.12).
+- **Anatomical Contiguity**: Enforces solid masses via **Clinical Size Filtering** (800px/400px).
 
 ### Model B (Tools) — STABLE
 - **Architecture**: U-Net with ResNet34.
@@ -41,7 +37,7 @@ LiverSegNet is a clinical-grade dual-stream surgical perception system. Version 
 ## 5. Directory Structure
 - `models/`: Neural architecture definitions.
 - `datasets/`: Clinical Proxy logic (`choleseg8k.py`).
-- `inference/`: V2.0.7 stabilized engine with EMA and Kinetic Safety.
-- `risk/`: Geometry safety and velocity scaling.
-- `ui/`: V2.0.7 Production Dashboard.
-- `docs/`: Auditable specifications and validation reports.
+- `inference/`: V3.0.0 Hybrid Engine with HSV Recovery & Size-Guards.
+- `risk/`: Geometry safety with velocity scaling.
+- `ui/`: V3.0.0 Dual-Stream Visualization Hub.
+- `docs/`: Auditable V3.0.0 specifications and validation reports.
