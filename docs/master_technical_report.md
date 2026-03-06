@@ -79,12 +79,17 @@ Here is the exact work done in each core file:
 
 ---
 
-## 7. Clinical Dashboard Manual
-The dashboard is your "Surgical Cockpit" for real-time monitoring:
-*   **Live Perception Hub**: side-by-side view showing the raw camera vs. the **Neon AI Overlay**.
-*   **Tactical Signals (Sidebar)**: Toggles to enable/disable the "Heuristic Search Party" or adjust sensitivity.
-*   **Kinetic Telemetry**: Color-coded proximity bars (Green -> Red) that calculate the distance to danger in pixels.
-*   **Heatmap Diagnostics**: A "warmth map" (Red=Confidence, Blue=Doubt) showing exactly where the AI is unsure.
+## 7. Clinical Dashboard: The "Surgical Cockpit"
+The LiverSegNet dashboard is a high-fidelity monitoring station designed for real-time surgical support.
+
+| Feature | **HOW** it works (Technical) | **WHY** it exists (Clinical) |
+| :--- | :--- | :--- |
+| **Neon-Glow Perception Engine** | Uses contour detection and alpha-blended "glass" masks with Gaussian-blurred neon silhouettes. | Enhances visibility of organ boundaries without obscuring the underlying surgical texture or blood vessels. |
+| **Multicolor Recovery (MAR) Toggle** | A hardware-level kill-switch for the heuristic discovery layer flag. | Allows surgeons to verify the "Pure AI" signal vs. the "Hybrid" signal to prevent over-reliance on heuristics. |
+| **Kinetic Safety Vector** | Calculates the pixel distance between the "Liver Master" and "Tool Tips" in real-time. | Provides an immediate visual warning (SAFE → CRITICAL) to prevent accidental tissue perforation or contact. |
+| **Heatmap Diagnostics** | Applies `COLORMAP_JET` to the raw probability maps (0.0 - 1.0) and blends it with the camera feed. | Shows exactly where the AI is "unsure" (Blue/Violet). This creates transparency so surgeons know when to trust the AI. |
+| **Surgical Compute Audit** | Monitors GPU VRAM, CPU load, and per-frame latency (<50ms) using `psutil` and `torch.cuda`. | Ensures hardware stability. High latency or memory overflow in surgery is a significant safety risk. |
+| **Quantitative Analytics Hub** | Real-time line/area charts tracking boundary precision and "consensus scores" between Models A and B. | Provides an auditable trail of AI performance and stability throughout the entire procedure. |
 
 ---
 
