@@ -6,7 +6,8 @@ LiverSegNet is a formalized hybrid perception system designed for real-time lapa
 
 ## Clinical Portfolio & Technical Advocacy
 *   [**The Hybrid Imperative**](docs/hybrid_justification.md): Why we rejected "Pure AI" for surgical navigation.
-*   [**Failure-Case Gallery**](docs/failure_case_gallery.md): How we handle shadows, glare, and mimicry.
+*   [**Master Technical Report**](docs/master_technical_report.md): Definitive guide on AI architecture, loss functions, and clinical logic.
+*   [**Development Timeline & MS Planner Tasks**](docs/development_timeline.md): Full breakdown of the 2-month development cycle and team tasks.
 *   [**Architectural Blueprint**](docs/architecture.md): Full system flow and signal definitions.
 
 ## Key Features
