@@ -93,7 +93,25 @@ The LiverSegNet dashboard is a high-fidelity monitoring station designed for rea
 
 ---
 
-## 8. Presentation Defense: "Is it just Geometry?"
+## 8. Intelligence Hub: Quantitative Surgical Analytics
+The **Intelligence Hub** acts as the system's "black box" logger, providing real-time data on the reliability of the perception kernels.
+
+*   **Boundary Precision Tracking**: Measures the mathematical "sharpness" of the liver edge. High precision indicates a solid neural signal, while drops in precision alert the team to possible occlusions or poor lighting.
+*   **Tool-Induced Tissue Displacement**: Estimates physical interaction between metal and organ. This helps in auditing how much the liver is moved during retraction, providing a metric for "Surgical Gentleness."
+*   **Model Consensus Score**: A real-time audit between Kernel A and Kernel B. If both models agree on the scene's geometry, the score is 100%. A drop in consensus flags a "Semantic Conflict" where the AI is confused between a tool and a tissue.
+
+---
+
+## 9. Heatmap Diagnostics: Explainable Confidence
+To build trust with surgeons, LiverSegNet provides **Heatmap Diagnostics**, which peel back the "AI Layer" to show the raw probability data.
+
+*   **Why it's used**: Surgeons need to know *when* to doubt the AI. If the system is 90% sure about a liver boundary, the heatmap is Deep Red. If it's only 20% sure, the map turns Blue/Violet.
+*   **The Logic**: We take the "Post-Softmax" probability maps from the models and apply a `JET` colormap. This map is then overlaid on the raw camera feed using alpha-blending.
+*   **The Result**: If a surgeon sees a "Blue Blur" over an area they know is the gallbladder, they can immediately switch to manual navigation or recalibrate the sensitive thresholds via the sidebar.
+
+---
+
+## 10. Presentation Defense: "Is it just Geometry?"
 If a panel asks: *"Is your AI even doing anything? It looks like geometry is doing all the work."*
 
 **The Defense:**
