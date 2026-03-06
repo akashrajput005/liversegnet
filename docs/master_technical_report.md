@@ -111,7 +111,26 @@ To build trust with surgeons, LiverSegNet provides **Heatmap Diagnostics**, whic
 
 ---
 
-## 10. Presentation Defense: "Is it just Geometry?"
+## 11. Architectural Justification: Why these Encoders?
+We chose a "Dual-Specialist" approach instead of a single massive model to ensure both accuracy and speed.
+
+*   **Model A: DeepLabV3+ (ResNet50)**: Perfect for anatomy because of **ASPP (Atrous Spatial Pyramid Pooling)**. Large organs like the liver don't have a fixed shape. ASPP allows the model to look at the organ at multiple scales simultaneously, capturing the global context of the surgical field.
+*   **Model B: U-Net (ResNet34)**: Perfect for instruments because of **Skip Connections**. Surgical tools are thin and sharp. Skip connections pass high-resolution details from the early encoder layers directly to the final output, ensuring that even a 1-pixel wide tool tip is never lost in the "deep" layers of the brain.
+*   **ResNet Encoders**: We selected **ResNet50** for anatomy for its deep representational power and **ResNet34** for tools for its high-speed throughput, ensuring the dual-model pipeline remains <50ms.
+
+---
+
+## 12. "Context-Aware" Intelligence
+The system is not just a "box detector"; it is a context-aware ecosystem that understands the surgical environment.
+
+1.  **Spatial Context**: Through **ASPP**, the AI understands the relationship between the liver and the surrounding fascia. It knows that a "red mass" near the diaphragm is likely liver, while a "red mass" near the instruments might be a bleed.
+2.  **Temporal Context**: Via **EMA Smoothing**, the system "remembers" where the tool was in the previous frame. It rejects "ghost detections" that appear in random places, ensuring the tracking stays physically grounded.
+3.  **Kinetic Context**: The **Safety Gates** change based on movement. The system is "aware" that a fast-moving tool is more dangerous than a stationary one, automatically expanding the risk buffer.
+4.  **Physically-Informed Context**: The **Heuristic Layer** uses the physical context of light and color (BGR/HSV) to recover what the AI misses in shadows, mirroring how a human surgeon uses their eyes to "see" through darkness.
+
+---
+
+## 13. Presentation Defense: "Is it just Geometry?"
 If a panel asks: *"Is your AI even doing anything? It looks like geometry is doing all the work."*
 
 **The Defense:**
