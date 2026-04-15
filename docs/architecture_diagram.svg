@@ -17,7 +17,7 @@
   <!-- INPUT -->
   <rect x="40" y="120" width="260" height="80" fill="#ffffff" stroke="#000" stroke-width="2"></rect>
   <text x="170" y="165" text-anchor="middle" font-size="14" font-weight="700">
-    Endoscopic Frame
+    Laparoscopic Frame
   </text>
 
   <!-- PREPROCESSING -->
