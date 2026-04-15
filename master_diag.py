@@ -56,9 +56,9 @@ def run_audit_mode(engine, frame, mode_name, use_heuristics):
 def final_audit():
     print("--- LIVERSEGNET V2.2.1: HYBRID FORMALIZATION AUDIT ---")
     
-    model_a_path = "./production_v2_2_0/weights/model_A_hybrid.pth"
-    model_b_path = "./production_v2_2_0/weights/model_B_hybrid.pth"
-    sample_frame_path = r"C:\Users\akash\Downloads\cholecseg8k\video01\video01_00080\frame_99_endo.png"
+    model_a_path = os.path.join("production_v2_2_0", "weights", "model_A_hybrid.pth")
+    model_b_path = os.path.join("production_v2_2_0", "weights", "model_B_hybrid.pth")
+    sample_frame_path = "sample_frame.png"
     
     try:
         engine = ClinicalInferenceEngine(model_a_path, model_b_path)
