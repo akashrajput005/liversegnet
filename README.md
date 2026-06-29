@@ -1,50 +1,230 @@
-# LiverSegNet
-### A Resilient Hybrid Perception Pipeline for Intra-operative Laparoscopic Navigation and Kinetic Safety
-[**Live Demo (Streamlit Cloud)**](https://liversegnet-nq3ncgte2bappazv7kbu7e.streamlit.app/)
+````markdown
+<div align="center">
 
-LiverSegNet is a formalized hybrid perception system designed for real-time laparoscopic anatomical segmentation and kinetic safety assessment. It bridges the gap between deep learning and clinical reality by integrating multiple signal streams.
+# 🫀 LiverSegNet
 
-## Clinical Portfolio & Technical Advocacy
-*   [**The Hybrid Imperative**](docs/hybrid_justification.md): Why we rejected "Pure AI" for surgical navigation.
-*   [**Master Technical Report**](docs/master_technical_report.md): Definitive guide on AI architecture, loss functions, and clinical logic.
-*   [**Development Timeline & MS Planner Tasks**](docs/development_timeline.md): Full breakdown of the 2-month development cycle and team tasks.
-*   [**Architectural Blueprint**](docs/architecture.md): Full system flow and signal definitions.
+### **Hybrid AI Perception Pipeline for Intra-operative Laparoscopic Navigation & Surgical Safety**
 
-## Key Features
-*   **Hybrid Perception Architecture**: Trio-signal processing (Neural, Deterministic, Heuristic).
-*   **Multicolor Anatomical Recovery (MAR)**: Physically-informed BGR discovery for shadowed anatomy.
-*   **Kinetic Safety Layer**: Real-time instrument tracking with velocity-adjusted risk buffers.
-*   **Surgical Navigation Hub**: Streamlit dashboard with detailed hardware compute audits and temporal smoothing.
-*   **Clinical Governance**: Fully kill-switchable heuristic layer and transparent signal classification.
+<p align="center">
 
-## System Structure
-```bash
-LiverSegNet/
-├── production_v2_2_0/    # PRODUCTION WEIGHTS & RELEASE ARTIFACTS
-├── inference/            # Core Perception Engine (Hybrid Logic)
-├── risk/                 # Kinetic Geometry & Safety Layer
-├── ui/                   # Surgical Navigation Dashboard (Streamlit)
-├── models/               # Deep Architecture Definitions (DeepLabV3+/UNet)
-├── datasets/             # Data loading & Clinical Proxy Logic
-├── training/             # Production Training Pipelines
-├── utils/                # Surgical Visualization & Logic Utils
-├── research/             # ARCHIVE: Debug scripts and validation logs
-└── docs/                 # Architectural Documentation & Diagrams
+Real-Time • Deep Learning • Computer Vision • Surgical Intelligence • Streamlit
+
+</p>
+
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)]
+[![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)]
+[![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)]
+[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)]
+
+### 🔗 Live Demo
+https://liversegnet-nq3ncgte2bappazv7kbu7e.streamlit.app/
+
+---
+
+> **LiverSegNet** is a hybrid perception framework engineered for intelligent laparoscopic navigation. The system combines neural segmentation, deterministic geometric reasoning, and heuristic anatomical recovery to provide robust real-time surgical perception while maintaining transparency, interpretability, and clinical safety.
+
+</div>
+
+---
+
+# Vision
+
+Modern operating rooms require AI systems that are not only accurate but also trustworthy.
+
+LiverSegNet follows a **Hybrid Intelligence** philosophy by integrating multiple perception pipelines instead of relying solely on deep learning predictions. The result is a resilient framework capable of assisting surgical navigation under challenging intra-operative conditions.
+
+---
+
+# Core Capabilities
+
+### Hybrid Perception Engine
+
+- Neural semantic segmentation
+- Deterministic geometric validation
+- Heuristic anatomical recovery
+- Multi-stage decision pipeline
+
+---
+
+### Deep Learning
+
+- DeepLabV3+
+- U-Net
+- Pixel-wise organ segmentation
+- Real-time inference pipeline
+
+---
+
+### Computer Vision
+
+- Instrument localization
+- Surgical scene understanding
+- Anatomical masking
+- Region-based analysis
+- Image enhancement pipeline
+
+---
+
+### Surgical Safety Layer
+
+- Instrument proximity analysis
+- Dynamic risk assessment
+- Velocity-aware safety buffers
+- Temporal prediction smoothing
+- Safety threshold monitoring
+
+---
+
+### Interactive Dashboard
+
+- Streamlit-powered clinical interface
+- Live segmentation visualization
+- Hardware diagnostics
+- Model audit information
+- Performance monitoring
+
+---
+
+# Hybrid AI Architecture
+
+```text
+                 Laparoscopic Video
+                          │
+                          ▼
+                Image Preprocessing
+                          │
+          ┌───────────────┼───────────────┐
+          │               │               │
+          ▼               ▼               ▼
+      Neural AI     Deterministic     Heuristic
+    Segmentation      Geometry      MAR Recovery
+          │               │               │
+          └───────────────┼───────────────┘
+                          ▼
+             Hybrid Decision Engine
+                          │
+                          ▼
+             Surgical Safety Analysis
+                          │
+                          ▼
+               Streamlit Navigation UI
+````
+
+---
+
+# Project Structure
+
+```text
+LiverSegNet
+│
+├── production_v2_2_0/
+├── inference/
+├── risk/
+├── ui/
+├── models/
+├── datasets/
+├── training/
+├── utils/
+├── research/
+├── docs/
+└── README.md
 ```
 
-## Quick Start
-1.  **Run Dashboard**: `streamlit run ui/dashboard.py`
-2.  **Execute Audit**: `python master_diag.py`
+---
 
-## Architecture: The Hybrid Edge
-LiverSegNet V3.0.0-HYBRID utilizes a **Classified Signal Pipeline**:
-1.  **NEURAL**: Primary organ/tool localization using DeepLabV3+ and UNet.
-2.  **DETERMINISTIC**: Hard geometric filters, FOV masking, and anatomical shielding.
-3.  **HEURISTIC**: BGR color-consistent growth (MAR) for recovering attenuated neural signals.
+# Technology Stack
 
-## Clinical Safety Gates
-*   **Critical Threshold**: 20.5 px
-*   **Warning Threshold**: 50.5 px
-*   **Temporal Stability**: EMA-weighted instrument trajectory smoothing.
+| Category             | Technologies      |
+| -------------------- | ----------------- |
+| Programming          | Python            |
+| Deep Learning        | PyTorch           |
+| Computer Vision      | OpenCV            |
+| Dashboard            | Streamlit         |
+| Medical AI           | DeepLabV3+, U-Net |
+| Visualization        | Matplotlib        |
+| Scientific Computing | NumPy             |
 
-*This system is formalized and frozen under V3.0.0-HYBRID governance.*
+---
+
+# Quick Start
+
+Clone the repository
+
+```bash
+git clone https://github.com/akashrajput005/liversegnet.git
+cd liversegnet
+```
+
+Run the dashboard
+
+```bash
+streamlit run ui/dashboard.py
+```
+
+Run diagnostics
+
+```bash
+python master_diag.py
+```
+
+---
+
+# Clinical Documentation
+
+* Hybrid AI Design Philosophy
+* Master Technical Report
+* Development Timeline
+* System Architecture
+* Clinical Governance
+
+All documentation is available inside the **docs/** directory.
+
+---
+
+# Clinical Safety
+
+* Hybrid signal classification
+* Kill-switchable heuristic layer
+* Temporal stability analysis
+* Dynamic safety thresholds
+* Explainable AI decision pipeline
+
+---
+
+# Future Roadmap
+
+* 3D Surgical Scene Understanding
+* Multi-organ segmentation
+* Transformer-based perception models
+* Real-time GPU optimization
+* Surgical workflow intelligence
+* Edge AI deployment
+* Clinical validation pipeline
+
+---
+
+# Research Focus
+
+* Medical Image Segmentation
+* Explainable Artificial Intelligence
+* Computer Vision
+* Surgical Navigation
+* Human-AI Collaboration
+* Hybrid Perception Systems
+
+---
+
+# Contributors
+
+This project is being actively developed through collaborative engineering efforts focused on AI, computer vision, and surgical navigation technologies.
+
+---
+
+<div align="center">
+
+### Engineering AI for Safer Surgery
+
+**Hybrid Intelligence • Explainable AI • Medical Vision • Clinical Safety**
+
+</div>
+```
