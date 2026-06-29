@@ -1,32 +1,36 @@
-````markdown
-<div align="center">
-
-# 🫀 LiverSegNet
-
-### **Hybrid AI Perception Pipeline for Intra-operative Laparoscopic Navigation & Surgical Safety**
+# 🌿 GoodLife Clinic — AI Powered Smart Healthcare Platform
 
 <p align="center">
 
-Real-Time • Deep Learning • Computer Vision • Surgical Intelligence • Streamlit
+<img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=700&size=30&duration=3000&pause=800&color=00E5FF&center=true&vCenter=true&width=1000&lines=Modern+Doctor+Appointment+Booking+Platform;AI-Integrated+Healthcare+Management+System;Secure+MERN+Stack+Healthcare+Application;Transforming+Healthcare+Digitally+🚀"/>
 
 </p>
 
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)]
-[![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)]
-[![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)]
-[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)]
+---
 
-### 🔗 Live Demo
-https://liversegnet-nq3ncgte2bappazv7kbu7e.streamlit.app/
+<p align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,25:2563eb,50:06b6d4,75:14b8a6,100:22c55e&height=180&section=header&text=GoodLife%20Clinic&fontSize=45&fontColor=ffffff&animation=fadeIn&fontAlignY=35"/>
+
+</p>
 
 ---
 
-> **LiverSegNet** is a hybrid perception framework engineered for intelligent laparoscopic navigation. The system combines neural segmentation, deterministic geometric reasoning, and heuristic anatomical recovery to provide robust real-time surgical perception while maintaining transparency, interpretability, and clinical safety.
+<p align="center">
 
-</div>
+<img src="https://img.shields.io/badge/MERN-Stack-success?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Authentication-JWT-blue?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Database-MongoDB-darkgreen?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Frontend-React.js-61DAFB?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Backend-Node.js-green?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Image%20Storage-Cloudinary-orange?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Email-Brevo-blue?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Deployment-Vercel%20%7C%20Render-success?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=for-the-badge"/>
+
+</p>
 
 ---
-
 # Vision
 
 Modern operating rooms require AI systems that are not only accurate but also trustworthy.
