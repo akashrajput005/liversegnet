@@ -239,14 +239,29 @@ class ClinicalInferenceEngine:
             (mask_a > 0).astype(np.uint8), smoothed_tips, velocity=self.tip_velocity
         )
         
-        spatial_reliability = float(torch.max(probs_a[0, 1:3, :, :]).cpu().numpy())
+        # Spatial Reliability: Mean confidence over localized anatomical ROI
+        if np.any(mask_a_raw == 1):
+            spatial_reliability = float(np.mean(probs_a_np[1][mask_a_raw == 1]))
+        elif np.any(mask_a_raw > 0):
+            spatial_reliability = float(np.mean(probs_a_np[1:5][mask_a_raw[None, ...] > 0]))
+        else:
+            spatial_reliability = 0.0
+            
         census = self.validate_consensus(mask_a_final, mask_b_final)
+
+        # Compute Shannon entropy map normalized to [0, 1]
+        p_clipped = np.clip(probs_a_np, 1e-7, 1.0)
+        entropy = -np.sum(p_clipped * np.log2(p_clipped), axis=0)
+        max_entropy = np.log2(probs_a_np.shape[0])
+        entropy_map = entropy / max_entropy
 
         return {
             'mask_a': mask_a_final,
             'mask_b': mask_b_final,
             'prob_liver': prob_liver,
             'prob_gb': prob_gb,
+            'prob_all_classes': probs_a_np,
+            'entropy_map': entropy_map,
             'tips': smoothed_tips,
             'velocity': current_velocity,
             'risk_status': risk_status,
@@ -260,6 +275,7 @@ class ClinicalInferenceEngine:
                 'heuristic': use_heuristics
             }
         }
+
 
     def validate_consensus(self, mask_a, mask_b):
         """Cross-Kernel Deterministic Consensus."""

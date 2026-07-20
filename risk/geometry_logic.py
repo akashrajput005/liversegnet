@@ -60,7 +60,8 @@ class GeometrySafetyLayer:
             "status": "SAFE"
         }
 
-        if not tool_tips:
+        if not tool_tips or not np.any(anatomy_mask):
+            telemetry["min_distance_px"] = float('inf')
             return "SAFE", float('inf'), telemetry
 
         # Distance Transform: Distance of each pixel from the liver boundary

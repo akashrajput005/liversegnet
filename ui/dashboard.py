@@ -8,6 +8,8 @@ import time
 import psutil
 import torch
 import importlib
+import plotly.graph_objects as go
+import plotly.express as px
 
 # Ensure project root is in sys.path for local module imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -15,6 +17,25 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import inference.engine
 importlib.reload(inference.engine)
 from inference.engine import ClinicalInferenceEngine
+
+import utils.analytics
+importlib.reload(utils.analytics)
+from utils.analytics import (
+    compute_boundary_precision,
+    compute_tissue_displacement,
+    compute_consensus_score
+)
+
+# Initialize metric history in session state
+if 'metric_history' not in st.session_state:
+    st.session_state['metric_history'] = {
+        'boundary_precision': [],
+        'tissue_displacement': [],
+        'tip_l2_error': [],
+        'consensus_score': [],
+        'timestamps': []
+    }
+
 
 # Custom Styling for Clinical Aesthetics
 st.set_page_config(page_title="LiverSegNet: Resilient Hybrid Surgical Perception", layout="wide")
@@ -28,6 +49,58 @@ st.markdown("""
     .stApp {
         background: radial-gradient(circle at 50% 50%, #1a1f2e 0%, #0d1117 100%);
     }
+    
+    /* Global overrides to force high visibility light-colored text regardless of base theme */
+    .stApp, .stApp p, .stApp span, .stApp div, .stApp li, .stApp label, .stApp section, .stApp button {
+        color: #e6edf3 !important;
+    }
+    
+    /* Headings highlighted in crisp white */
+    .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6, .glass-header {
+        color: #ffffff !important;
+        font-weight: bold !important;
+    }
+
+    /* Muted text colors for caption Container */
+    .stApp caption, .stApp [data-testid="stCaptionContainer"] {
+        color: #b0b8c0 !important;
+    }
+
+    /* Keep metric value and text clean */
+    [data-testid="stMetricValue"] {
+        color: #ffffff !important;
+    }
+    
+    /* Tab label styling to make active/inactive distinct and visible */
+    button[data-baseweb="tab"] p {
+        color: #8892b0 !important;
+        font-weight: 500 !important;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] p {
+        color: #00c4ff !important;
+        font-weight: bold !important;
+    }
+
+    /* Sidebar controls and text override */
+    section[data-testid="stSidebar"] {
+        background-color: #0d1117 !important;
+        background-image: none !important;
+    }
+    section[data-testid="stSidebar"] * {
+        color: #e6edf3 !important;
+    }
+    section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3, section[data-testid="stSidebar"] h4, section[data-testid="stSidebar"] h5, section[data-testid="stSidebar"] h6 {
+        color: #ffffff !important;
+    }
+
+    /* Style select box text to be dark/black so it is visible on the white input background */
+    div[data-baseweb="select"] * {
+        color: #0e1117 !important;
+    }
+    div[role="listbox"] * {
+        color: #0e1117 !important;
+    }
+
     .metric-card {
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(10px);
@@ -38,16 +111,19 @@ st.markdown("""
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         margin-bottom: 20px;
     }
+    .metric-card * {
+        color: #ffffff !important;
+    }
     .glass-header {
         font-family: 'Inter', sans-serif;
         font-weight: 700;
         letter-spacing: -1px;
-        color: #ffffff;
+        color: #ffffff !important;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     }
     .verified-tag {
         background: linear-gradient(90deg, #00ffa3, #00c4ff);
-        color: #000000;
+        color: #000000 !important;
         font-weight: 900;
         padding: 4px 10px;
         border-radius: 6px;
@@ -56,7 +132,7 @@ st.markdown("""
     }
     .violation-tag {
         background: linear-gradient(90deg, #ff3d00, #ff8f00);
-        color: #ffffff;
+        color: #ffffff !important;
         font-weight: 900;
         padding: 4px 10px;
         border-radius: 6px;
@@ -150,27 +226,54 @@ with tab1:
     col1, col2 = st.columns([2, 1])
     with col1:
         st.markdown("<h3 class='glass-header'>High-Fidelity Perception Layer</h3>", unsafe_allow_html=True)
+        demo_btn = st.checkbox("Load Demo Laparoscopic Frame", value=True)
         uploaded_file = st.file_uploader("Upload Laparoscopic Data", type=['png', 'jpg', 'jpeg'])
-        if uploaded_file and engine:
+        
+        frame = None
+        if uploaded_file:
             file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
             frame = cv2.imdecode(file_bytes, 1)
+        elif demo_btn:
+            demo_path = r"C:\Users\akash\Downloads\Images Folder\Images Folder\Liver bladder + 2 tools.png"
+            if os.path.exists(demo_path):
+                frame = cv2.imread(demo_path)
+            else:
+                if os.path.exists("sample_frame.png"):
+                    frame = cv2.imread("sample_frame.png")
+                    
+        if frame is not None and engine:
             st.session_state['last_frame'] = frame 
             
             with st.spinner("Executing Hybrid Pipeline..."):
                 try:
                     results = engine.infer(frame, confidence_threshold=confidence_threshold, use_heuristics=use_heuristics)
                     st.session_state['latest_results'] = results
+                    
+                    if results:
+                        bp = compute_boundary_precision((results['mask_a'] == 1).astype(np.uint8), results['prob_liver'])
+                        td = compute_tissue_displacement((results['mask_a'] == 1).astype(np.uint8), results['tips'], frame.shape)
+                        l2 = results['velocity']
+                        cs = compute_consensus_score(results['mask_a'], results['mask_b'])
+                        
+                        history = st.session_state['metric_history']
+                        history['boundary_precision'].append(bp)
+                        history['tissue_displacement'].append(td)
+                        history['tip_l2_error'].append(l2)
+                        history['consensus_score'].append(cs)
+                        history['timestamps'].append(len(history['timestamps']) + 1)
                 except Exception as e:
                     st.error(f"Inference Error: {e}")
                     results = None
                     st.session_state['latest_results'] = None
+
             
             # Visualization Layers
-            h, w = frame.shape[:2]
-            mask_a_resized = cv2.resize(results['mask_a'].astype(np.uint8), (w, h), interpolation=cv2.INTER_NEAREST)
-            mask_b_resized = cv2.resize(results['mask_b'].astype(np.uint8), (w, h), interpolation=cv2.INTER_NEAREST)
-            
-            overlay = frame.copy()
+            if results is not None:
+                h, w = frame.shape[:2]
+                mask_a_resized = cv2.resize(results['mask_a'].astype(np.uint8), (w, h), interpolation=cv2.INTER_NEAREST)
+                mask_b_resized = cv2.resize(results['mask_b'].astype(np.uint8), (w, h), interpolation=cv2.INTER_NEAREST)
+                
+                overlay = frame.copy()
             
             # --- ANATOMY CORE (V2.1.4: Neon glass) ---
             # 1. Liver (Class 1) - Neon Green
@@ -212,10 +315,11 @@ with tab1:
             v_col1, v_col2 = st.columns(2)
             
             with v_col1:
-                st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Original Sequence", use_column_width=True)
+                st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Original Sequence", use_container_width=True)
             
             with v_col2:
-                st.image(cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB), caption="AI Perception Layer", use_column_width=True)
+                st.image(cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB), caption="AI Perception Layer", use_container_width=True)
+
 
             # Legends
             st.markdown("---")
@@ -233,6 +337,9 @@ with tab1:
             st.markdown("<h3 class='glass-header'>Clinical Telemetry</h3>", unsafe_allow_html=True)
             
             # --- V2.0.3 Aesthetic Cards ---
+            spatial_integrity_str = f"{results.get('spatial_reliability', 0.0)*100:.1f}%"
+            tool_velocity_str = f"{results.get('velocity', 0.0):.1f} px/f"
+            
             st.markdown(f"""
             <div class='metric-card'>
                 <p style='margin:0; font-size:0.9em; opacity:0.7;'>ANATOMICAL STATE</p>
@@ -242,8 +349,8 @@ with tab1:
             
             <div class='metric-card'>
                 <p style='margin:0; font-size:0.9em; opacity:0.7;'>KINETIC ANALYTICS</p>
-                <h4 style='margin:0;'>Spatial Integrity: {results.get('spatial_reliability', 0.0)*100:.1f}%</h4>
-                <h4 style='margin:0;'>Tool velocity: {results.get('velocity', 0.0):.1f} px/f</h4>
+                <h4 style='margin:0;'>Spatial Integrity: {spatial_integrity_str}</h4>
+                <h4 style='margin:0;'>Tool velocity: {tool_velocity_str}</h4>
                 <p style='margin:0; font-size:0.8em; opacity:0.6;'>Critical Gate: 20.5 px</p>
                 <p style='margin:0; font-size:0.8em; opacity:0.6;'>Warning Gate: 50.5 px</p>
             </div>
@@ -288,24 +395,175 @@ with tab1:
 with tab2:
     st.markdown("### Quantitative Surgical Analytics")
     st.info("These metrics track the real-time stability and precision of the perception kernels.")
-    c1, c2 = st.columns(2)
-    with c1:
-        st.markdown("#### Anatomical Boundary Precision")
-        st.caption("Measures the sharpness and accuracy of the liver-to-background transition edge.")
-        st.line_chart(np.random.normal(0.92, 0.02, size=(50, 1)))
-        
-        st.markdown("#### Tool-Induced Tissue Displacement")
-        st.caption("Estimated physical interaction between instruments and anatomy in pixels.")
-        st.area_chart(np.random.rand(20, 1) * 2)
+    
+    history = st.session_state.get('metric_history', {})
+    timestamps = history.get('timestamps', [])
+    
+    if not timestamps:
+        st.warning("Awaiting surgical analysis session. Please upload laparoscopic images in the '🔴 Live Perception' tab to initialize telemetry history.")
+    else:
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("#### Anatomical Boundary Precision")
+            st.caption("Measures the sharpness and accuracy of the liver-to-background transition edge.")
+            
+            bp_vals = history['boundary_precision']
+            fig_bp = go.Figure()
+            fig_bp.add_trace(go.Scatter(
+                x=timestamps, y=bp_vals,
+                mode='lines+markers',
+                name='Boundary Precision',
+                line=dict(color='#00ffa3', width=2),
+                fill='tozeroy',
+                fillcolor='rgba(0, 255, 163, 0.1)',
+                hovertemplate="Frame: %{x}<br>Precision: %{y:.4f}<extra></extra>"
+            ))
+            if len(bp_vals) >= 3:
+                sma_vals = [np.mean(bp_vals[max(0, i-2):i+1]) for i in range(len(bp_vals))]
+                fig_bp.add_trace(go.Scatter(
+                    x=timestamps, y=sma_vals,
+                    mode='lines',
+                    name='3-Frame SMA',
+                    line=dict(color='#ffffff', width=1.5, dash='dot'),
+                    hovertemplate="Frame: %{x}<br>3-Frame SMA: %{y:.4f}<extra></extra>"
+                ))
+            fig_bp.add_hline(y=0.85, line_dash="dash", line_color="#ffeb3b", 
+                              annotation_text="Clinical Threshold (0.85)", annotation_position="top left")
+            fig_bp.update_layout(
+                template='plotly_dark',
+                paper_bgcolor='#0d1117',
+                plot_bgcolor='#0d1117',
+                font=dict(color='#ffffff'),
+                margin=dict(l=10, r=10, t=10, b=10),
+                xaxis=dict(title='Sequence Frame'),
+                yaxis=dict(range=[0, 1.05], title='Precision Score'),
+                height=300
+            )
+            st.plotly_chart(fig_bp, use_container_width=True, theme=None)
+            
+            st.markdown("#### Tool-Induced Tissue Displacement")
+            st.caption("Estimated physical interaction/compression of instruments on anatomy (converted to physical mm).")
+            
+            td_vals_mm = [val * 0.12 for val in history['tissue_displacement']]
+            fig_td = go.Figure()
+            fig_td.add_trace(go.Scatter(
+                x=timestamps, y=td_vals_mm,
+                mode='lines+markers',
+                name='Displacement',
+                fill='tozeroy',
+                fillcolor='rgba(0,196,255,0.15)',
+                line=dict(color='#00c4ff', width=2),
+                hovertemplate="Frame: %{x}<br>Displacement: %{y:.2f} mm<extra></extra>"
+            ))
+            fig_td.add_hline(y=6.06, line_dash="dash", line_color="#ffeb3b", 
+                              annotation_text="Warning Threshold (6.06 mm)", annotation_position="top left")
+            fig_td.add_hline(y=2.46, line_dash="dash", line_color="#ff3d00", 
+                              annotation_text="Critical Threshold (2.46 mm)", annotation_position="top left")
+            
+            fig_td.update_layout(
+                template='plotly_dark',
+                paper_bgcolor='#0d1117',
+                plot_bgcolor='#0d1117',
+                font=dict(color='#ffffff'),
+                margin=dict(l=10, r=10, t=10, b=10),
+                xaxis=dict(title='Sequence Frame'),
+                yaxis=dict(title='Distance / Compression (mm)'),
+                height=300
+            )
+            st.plotly_chart(fig_td, use_container_width=True, theme=None)
+            
+        with c2:
+            st.markdown("#### Instrument Tip Localization Precision (L2)")
+            st.caption("L2 jitter error in pixels in tip tracking compared to temporal history.")
+            
+            l2_vals = history['tip_l2_error']
+            fig_l2 = go.Figure()
+            fig_l2.add_trace(go.Scatter(
+                x=timestamps, y=l2_vals,
+                mode='lines+markers',
+                name='L2 Jitter',
+                line=dict(color='#ff6ec7', width=2),
+                marker=dict(size=6, color='#ff6ec7'),
+                hovertemplate="Frame: %{x}<br>Jitter: %{y:.2f} px<extra></extra>"
+            ))
+            if len(l2_vals) >= 3:
+                sma_l2 = [np.mean(l2_vals[max(0, i-2):i+1]) for i in range(len(l2_vals))]
+                fig_l2.add_trace(go.Scatter(
+                    x=timestamps, y=sma_l2,
+                    mode='lines',
+                    name='3-Frame SMA',
+                    line=dict(color='#ffffff', width=1.5, dash='dot'),
+                    hovertemplate="Frame: %{x}<br>3-Frame SMA: %{y:.2f} px<extra></extra>"
+                ))
+            fig_l2.update_layout(
+                template='plotly_dark',
+                paper_bgcolor='#0d1117',
+                plot_bgcolor='#0d1117',
+                font=dict(color='#ffffff'),
+                margin=dict(l=10, r=10, t=10, b=10),
+                xaxis=dict(title='Sequence Frame'),
+                yaxis=dict(title='L2 Jitter (pixels)'),
+                height=300
+            )
+            st.plotly_chart(fig_l2, use_container_width=True, theme=None)
+            
+            st.markdown("#### Model Consensus Score")
+            st.caption("Agreement percentage between Kernel A (Anatomy) and Kernel B (Tools).")
+            
+            latest_cs = history['consensus_score'][-1] * 100
+            fig_gauge = go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=latest_cs,
+                domain={'x': [0.1, 0.9], 'y': [0.1, 0.9]},
+                gauge={
+                    'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': '#ffffff'},
+                    'bar': {'color': '#00c4ff', 'thickness': 0.3},
+                    'bgcolor': 'rgba(255,255,255,0.05)',
+                    'borderwidth': 1,
+                    'bordercolor': 'rgba(255,255,255,0.1)',
+                    'steps': [
+                        {'range': [0, 60], 'color': 'rgba(255, 61, 0, 0.25)'},
+                        {'range': [60, 85], 'color': 'rgba(255, 235, 59, 0.25)'},
+                        {'range': [85, 100], 'color': 'rgba(0, 255, 163, 0.25)'}
+                    ]
+                }
+            ))
+            fig_gauge.update_layout(
+                template='plotly_dark',
+                paper_bgcolor='#0d1117',
+                plot_bgcolor='#0d1117',
+                font=dict(color='#ffffff'),
+                height=220,
+                margin=dict(t=40, b=20, l=30, r=30)
+            )
+            st.plotly_chart(fig_gauge, use_container_width=True, theme=None)
+            
+            cs_vals_pct = [val * 100 for val in history['consensus_score']]
+            colors = []
+            for val in cs_vals_pct:
+                if val >= 85: colors.append('#00ffa3')
+                elif val >= 60: colors.append('#ffeb3b')
+                else: colors.append('#ff3d00')
+                
+            fig_cs_bar = go.Figure(go.Bar(
+                x=timestamps, y=cs_vals_pct,
+                marker_color=colors,
+                name='Consensus History',
+                hovertemplate="Frame: %{x}<br>Consensus: %{y:.1f}%<extra></extra>"
+            ))
+            fig_cs_bar.update_layout(
+                template='plotly_dark',
+                paper_bgcolor='#0d1117',
+                plot_bgcolor='#0d1117',
+                font=dict(color='#ffffff'),
+                margin=dict(l=10, r=10, t=10, b=10),
+                xaxis=dict(title='Sequence Frame'),
+                yaxis=dict(range=[0, 105], title='Consensus Score (%)'),
+                height=180
+            )
+            st.plotly_chart(fig_cs_bar, use_container_width=True, theme=None)
 
-    with c2:
-        st.markdown("#### Instrument Tip Localization Precision (L2)")
-        st.caption("L2 Error (normalized) in tip tracking compared to temporal history.")
-        st.line_chart(np.random.normal(1.1, 0.1, size=(50, 1)))
-        
-        st.markdown("#### Model Consensus Score")
-        st.caption("Agreement percentage between Kernel A (Anatomy) and Kernel B (Tools).")
-        st.bar_chart(np.random.rand(15, 1) + 0.8)
+
 
 with tab3:
     st.markdown("### Heatmap Diagnostics (Model Confidence)")
@@ -315,35 +573,205 @@ with tab3:
     if results:
         frame_data = st.session_state.get('last_frame', None)
         if frame_data is not None:
-            h, w = frame_data.shape[:2]
-            c1, c2 = st.columns(2)
-            
-            with c1:
-                st.markdown("#### Liver Confidence Map")
-                prob_map = results.get('prob_liver', np.zeros((256, 256)))
-                # Fix: Rescale and ensure 2D
-                if len(prob_map.shape) > 2: prob_map = prob_map[0]
-                heat_liver = cv2.resize(prob_map, (w, h))
-                heat_liver_norm = (np.clip(heat_liver, 0, 1) * 255).astype(np.uint8)
-                heatmap_img = cv2.applyColorMap(heat_liver_norm, cv2.COLORMAP_JET)
-                # Blend with original for context
-                blended_heat = cv2.addWeighted(cv2.cvtColor(frame_data, cv2.COLOR_BGR2RGB), 0.5, cv2.cvtColor(heatmap_img, cv2.COLOR_BGR2RGB), 0.5, 0)
-                st.image(blended_heat, caption="Liver Confidence (Red = High)", use_column_width=True)
+            st.markdown("#### Diagnostic Visualization Controls")
+            ctrl_c1, ctrl_c2, ctrl_c3 = st.columns(3)
+            with ctrl_c1:
+                blend_alpha = st.slider("Overlay Transparency (Heatmaps)", 0.1, 1.0, 0.5, 0.05)
+            with ctrl_c2:
+                colormap_name = st.selectbox("Heatmap Colormap", ["Inferno (Clinical)", "Magma", "Viridis", "JET (Legacy)"])
+                colormap_map = {
+                    "Inferno (Clinical)": cv2.COLORMAP_INFERNO,
+                    "Magma": cv2.COLORMAP_MAGMA,
+                    "Viridis": cv2.COLORMAP_VIRIDIS,
+                    "JET (Legacy)": cv2.COLORMAP_JET
+                }
+                selected_cmap = colormap_map[colormap_name]
+            with ctrl_c3:
+                show_contours = st.checkbox("Show Boundary Contours on Heatmap", value=True)
                 
-            with c2:
-                st.markdown("#### Gallbladder Confidence Map")
-                prob_map_gb = results.get('prob_gb', np.zeros((256, 256)))
-                if len(prob_map_gb.shape) > 2: prob_map_gb = prob_map_gb[0]
-                heat_gb = cv2.resize(prob_map_gb, (w, h))
-                heat_gb_norm = (np.clip(heat_gb, 0, 1) * 255).astype(np.uint8)
-                heatmap_gb_img = cv2.applyColorMap(heat_gb_norm, cv2.COLORMAP_JET)
-                blended_gb = cv2.addWeighted(cv2.cvtColor(frame_data, cv2.COLOR_BGR2RGB), 0.5, cv2.cvtColor(heatmap_gb_img, cv2.COLOR_BGR2RGB), 0.5, 0)
-                st.image(blended_gb, caption="GB Confidence (Red = High)", use_column_width=True)
+            h, w = frame_data.shape[:2]
+            frame_rgb = cv2.cvtColor(frame_data, cv2.COLOR_BGR2RGB)
+            
+            st.markdown("---")
+            r1_col1, r1_col2 = st.columns(2)
+            
+            with r1_col1:
+                st.markdown("#### Organ Confidence Heatmap")
+                class_selector = st.selectbox("Select Target Organ", 
+                    ["🫁 Liver (Class 1)", "💚 Gallbladder (Class 2)", "🟠 GI Tract (Class 3)", "⬜ Fascia/Peritoneum (Class 4)", "⬛ Background (Class 0)"],
+                    index=0)
+                class_idx = {
+                    "🫁 Liver (Class 1)": 1, 
+                    "💚 Gallbladder (Class 2)": 2, 
+                    "🟠 GI Tract (Class 3)": 3, 
+                    "⬜ Fascia/Peritoneum (Class 4)": 4, 
+                    "⬛ Background (Class 0)": 0
+                }[class_selector]
+                
+                prob_all = results.get('prob_all_classes', None)
+                if prob_all is not None:
+                    prob_map = prob_all[class_idx]
+                else:
+                    if class_idx == 1:
+                        prob_map = results.get('prob_liver', np.zeros((256, 256)))
+                    elif class_idx == 2:
+                        prob_map = results.get('prob_gb', np.zeros((256, 256)))
+                    else:
+                        prob_map = np.zeros((256, 256))
+                        
+                if len(prob_map.shape) > 2: prob_map = prob_map[0]
+                heat_resized = cv2.resize(prob_map, (w, h))
+                heat_norm = (np.clip(heat_resized, 0, 1) * 255).astype(np.uint8)
+                heatmap_img = cv2.applyColorMap(heat_norm, selected_cmap)
+                heatmap_img_rgb = cv2.cvtColor(heatmap_img, cv2.COLOR_BGR2RGB)
+                
+                blended_heat = cv2.addWeighted(frame_rgb, 1.0 - blend_alpha, heatmap_img_rgb, blend_alpha, 0)
+                
+                if show_contours:
+                    mask_a = results.get('mask_a', np.zeros((h, w)))
+                    class_mask = (mask_a == class_idx).astype(np.uint8)
+                    contours, _ = cv2.findContours(class_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    cv2.drawContours(blended_heat, contours, -1, (255, 255, 255), 2)
+                    
+                st.image(blended_heat, caption=f"{class_selector} Confidence Blend", use_container_width=True)
+                
+            with r1_col2:
+                st.markdown("#### Boundary Uncertainty Map (Shannon Entropy)")
+                entropy_map = results.get('entropy_map', None)
+                if entropy_map is None:
+                    prob_liver = results.get('prob_liver', np.zeros((256, 256)))
+                    p = np.clip(prob_liver, 1e-7, 1-1e-7)
+                    entropy_map = -(p * np.log2(p) + (1-p) * np.log2(1-p))
+                
+                entropy_resized = cv2.resize(entropy_map, (w, h))
+                entropy_norm = (np.clip(entropy_resized, 0, 1) * 255).astype(np.uint8)
+                entropy_cmap = cv2.applyColorMap(entropy_norm, cv2.COLORMAP_MAGMA)
+                entropy_cmap_rgb = cv2.cvtColor(entropy_cmap, cv2.COLOR_BGR2RGB)
+                blended_uncertainty = cv2.addWeighted(frame_rgb, 1.0 - blend_alpha, entropy_cmap_rgb, blend_alpha, 0)
+                
+                st.image(blended_uncertainty, caption="Epistemic/Aleatoric Uncertainty Map (Bright = High Doubt)", use_container_width=True)
+                
+            st.markdown("---")
+            r2_col1, r2_col2 = st.columns(2)
+            
+            with r2_col1:
+                st.markdown("#### Proximity Safety Zone Map")
+                mask_a = results.get('mask_a', np.zeros((h, w)))
+                anatomy_binary = (mask_a > 0).astype(np.uint8)
+                dist_map = cv2.distanceTransform(1 - anatomy_binary, cv2.DIST_L2, 5)
+                
+                dist_map_mm = dist_map * 0.12
+                norm_dist = np.clip(dist_map_mm / 30.0, 0, 1)
+                inverted_dist = 1.0 - norm_dist
+                inverted_norm = (inverted_dist * 255).astype(np.uint8)
+                
+                dist_cmap = cv2.applyColorMap(inverted_norm, cv2.COLORMAP_HOT)
+                dist_cmap_rgb = cv2.cvtColor(dist_cmap, cv2.COLOR_BGR2RGB)
+                blended_distance = cv2.addWeighted(frame_rgb, 0.4, dist_cmap_rgb, 0.6, 0)
+                
+                tips = results.get('tips', [])
+                for tip in tips:
+                    tx = int(tip[0] * w / 256.0)
+                    ty = int(tip[1] * h / 256.0)
+                    cv2.circle(blended_distance, (tx, ty), 12, (255, 255, 255), -1)
+                    cv2.circle(blended_distance, (tx, ty), 15, (0, 0, 255), 2)
+                    
+                st.image(blended_distance, caption="Proximity Hazard Map (Red = High Proximity Zone)", use_container_width=True)
+                
+            with r2_col2:
+                st.markdown("#### Segmentation Boundary Outline Overlay")
+                boundary_overlay = frame_rgb.copy()
+                colors = {
+                    1: (0, 255, 163),  
+                    2: (0, 196, 255),  
+                    3: (255, 165, 0),  
+                    4: (255, 61, 0)    
+                }
+                for class_id, col in colors.items():
+                    class_mask = (mask_a == class_id).astype(np.uint8)
+                    cnts, _ = cv2.findContours(class_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    cv2.drawContours(boundary_overlay, cnts, -1, col, 2)
+                    
+                st.image(boundary_overlay, caption="Crisp Spatial Segment Contours", use_container_width=True)
+                
+            st.markdown("---")
+            r3_col1, r3_col2 = st.columns(2)
+            
+            with r3_col1:
+                st.markdown("#### Softmax Confidence Distribution")
+                fig_hist = go.Figure()
+                prob_liver = results.get('prob_liver', np.zeros(1))
+                prob_gb = results.get('prob_gb', np.zeros(1))
+                
+                fig_hist.add_trace(go.Histogram(
+                    x=prob_liver.flatten(),
+                    nbinsx=50,
+                    marker_color='#00ffa3',
+                    opacity=0.6,
+                    name='Liver'
+                ))
+                fig_hist.add_trace(go.Histogram(
+                    x=prob_gb.flatten(),
+                    nbinsx=50,
+                    marker_color='#00c4ff',
+                    opacity=0.6,
+                    name='Gallbladder'
+                ))
+                fig_hist.update_layout(
+                    barmode='overlay',
+                    template='plotly_dark',
+                    paper_bgcolor='#0d1117',
+                    plot_bgcolor='#0d1117',
+                    font=dict(color='#ffffff'),
+                    margin=dict(l=10, r=10, t=10, b=10),
+                    xaxis=dict(title='Confidence Value (0.0 to 1.0)'),
+                    yaxis=dict(title='Pixel Frequency'),
+                    height=280
+                )
+                st.plotly_chart(fig_hist, use_container_width=True, theme=None)
+                
+            with r3_col2:
+                st.markdown("#### Per-Class Detection Strength")
+                prob_all = results.get('prob_all_classes', None)
+                if prob_all is not None:
+                    max_conf = [float(np.max(prob_all[i])) for i in range(5)]
+                else:
+                    max_conf = [1.0, float(np.max(results.get('prob_liver', [0]))), float(np.max(results.get('prob_gb', [0]))), 0.0, 0.0]
+                    
+                fig_radar = go.Figure(go.Scatterpolar(
+                    r=max_conf,
+                    theta=['Background', 'Liver', 'Gallbladder', 'GI Tract', 'Fascia'],
+                    fill='toself',
+                    line_color='#ff6ec7',
+                    marker=dict(color='#ff6ec7')
+                ))
+                fig_radar.update_layout(
+                    polar=dict(
+                        radialaxis=dict(
+                            visible=True, 
+                            range=[0, 1.0],
+                            gridcolor='rgba(255,255,255,0.1)',
+                            linecolor='rgba(255,255,255,0.1)'
+                        ),
+                        angularaxis=dict(
+                            gridcolor='rgba(255,255,255,0.1)',
+                            linecolor='rgba(255,255,255,0.1)'
+                        )
+                    ),
+                    showlegend=False,
+                    template='plotly_dark',
+                    paper_bgcolor='#0d1117',
+                    plot_bgcolor='#0d1117',
+                    font=dict(color='#ffffff'),
+                    margin=dict(l=20, r=20, t=20, b=20),
+                    height=280
+                )
+                st.plotly_chart(fig_radar, use_container_width=True, theme=None)
+
                 
             st.markdown("#### Diagnostic Telemetry")
-            prob_liver_arr = results.get('prob_liver', np.zeros(1))
-            max_p_liver = np.max(prob_liver_arr)
-            st.write(f"**Peak Liver Confidence**: {max_p_liver:.4f}")
+            max_p_liver = np.max(results.get('prob_liver', np.zeros(1)))
+            st.write(f"**Peak Liver Confidence**: {max_p_liver:.4f} | **Spatial Reliability**: {results.get('spatial_reliability', 0.0):.4f}")
             if max_p_liver < 0.1:
                 st.error("CRITICAL: Liver confidence is below 10%. Model weights may need recalibration for this tissue type.")
             elif max_p_liver < 0.25:

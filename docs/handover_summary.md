@@ -13,7 +13,7 @@ The system is now fully remediated according to the **V3 Clinical Recovery Proto
 
 ### 2. Kinetic Safety (Active)
 - **Velocity-Aware Gates**: Risk thresholds in `risk/geometry_logic.py` now expand dynamically based on instrument speed.
-- **Spatial Reliability**: Telemetry now reports peak localized confidence (Class 1/2) for surgical verification.
+- **Spatial Reliability**: Telemetry reports mean confidence across the localized organ ROI (complementing Peak Liver Confidence).
 - **EMA Engine**: Deterministic smoothing locks tooltips to physical instrument tips.
 
 ### 3. V3.0.0 Recovery Protocols (Hardened)
@@ -23,9 +23,9 @@ The system is now fully remediated according to the **V3 Clinical Recovery Proto
 - **Final Audit**: Verified via `master_diag.py` on 'Gold Frame' (1 solid component, zero zigzag noise).
 
 ## 📁 Critical Files
-- **Inference Engine**: [engine.py](file:///c:/Users/Public/liversegnet/inference/engine.py)
-- **Safety Layer**: [geometry_logic.py](file:///c:/Users/Public/liversegnet/risk/geometry_logic.py)
-- **Retraining Target**: [choleseg8k.py](file:///c:/Users/Public/liversegnet/datasets/choleseg8k.py)
-- **Diagnostic Audit**: [master_diag.py](file:///c:/Users/Public/liversegnet/master_diag.py)
+- **Inference Engine**: [engine.py](file:///c:/Users/akash/Projects/LiverSegNet/inference/engine.py)
+- **Safety Layer**: [geometry_logic.py](file:///c:/Users/akash/Projects/LiverSegNet/risk/geometry_logic.py)
+- **Retraining Target**: [choleseg8k.py](file:///c:/Users/akash/Projects/LiverSegNet/datasets/choleseg8k.py)
+- **Diagnostic Audit**: [master_diag.py](file:///c:/Users/akash/Projects/LiverSegNet/master_diag.py)
 
 **The system is verified, compliant, and ready for production.**
