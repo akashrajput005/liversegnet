@@ -17,7 +17,6 @@ research/
 *.jpg
 *.jpeg
 !README.md
-!docs/architecture.md
 !production_v2_2_0/VERSION.txt
 
 # Production Evidence (Optional to keep in Repo, better in Releases)
